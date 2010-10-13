@@ -3,12 +3,43 @@
  * "THE BEER-WARE LICENSE" (Revision 42):
  * <mayeu.tik@gmail.com> and <pierrealain.toret@gmail.com> wrote this file. As 
  * long as you retain this notice you can do whatever you want with this stuff. 
- * If we meet some day, and you * think * this stuff is worth it, you can buy 
- * us a beer in return Matthieu Maury & Pierre-Alain Toret
+ * If we meet some day, and you think this stuff is worth it, you can buy us a
+ * beer in return. Matthieu Maury & Pierre-Alain Toret
  * ----------------------------------------------------------------------------
  */
 
-          Elliptic Curve Cryptosystem
+          Zap : Elliptic Curve Cryptosystem
 
+This is an university project to illustrate the use of elliptic curve in
+crytography.
 
+Goal of the project
+===================
+
+* Using GMP
+* Implement the following operation on points of Weierstrass curve:
+   * additive inverse
+   * addition
+   * P + P
+   * nP
+* Calculation of the order of a point
+* Diffie-Hellman protocol
+* Massey-Omura cryptosystem
+
+File of the project
+===================
+
+We use this project tree :
+
+/
+|-bin          Binary file
+|-build        Build folder
+|-doc          Generate code source documentation
+|-src          Source of the software
+|  |-libzap    Source of the library
+|  |-test      Test of the library
+|  |-zap.c     Main implementation
+|-doc.conf     Doxygen configuration file
+|-Makefile     Makefile of the project
+|-README       This file
 
