@@ -36,6 +36,7 @@ We use this project tree :
 |-build        Build folder
 |-doc          Generate code source documentation
 |-src          Source of the software
+|  |-include   Include file of the lib
 |  |-libzap    Source of the library
 |  |-test      Test of the library
 |  |-zap.c     Main implementation
