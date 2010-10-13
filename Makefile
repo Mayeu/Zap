@@ -79,3 +79,7 @@ indent:
 	indent $(IDT_OPT) $(SRC_LIB)/*.h
 	indent $(IDT_OPT) $(SRC_TEST)/*.c
 	indent $(IDT_OPT) $(SRC_TEST)/*.h
+
+# Doc
+doc :
+	doxygen doc.conf
