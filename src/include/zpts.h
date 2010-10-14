@@ -62,7 +62,7 @@ typedef struct _ECPTS
 
 /**
  * @brief return the value of x, the returned value is safe to modify
- * @param the points
+ * @param the point
  * @return a pointer to the x value
  */
 
@@ -70,7 +70,7 @@ typedef struct _ECPTS
 
 /**
  * @brief return the value of y, the returned value is safe to modify
- * @param the points
+ * @param the point
  * @return a pointer to the y value
  */
 
@@ -78,7 +78,7 @@ typedef struct _ECPTS
 
 /**
  * @brief set the value of x
- * @param the points
+ * @param the point
  * @param the value of x
  * @return void
  */
@@ -87,22 +87,23 @@ void ecpts_set_x (*ecpts_t pts, mpz_t x) ;
 
 /**
  * @brief set the value of y
- * @param the points
+ * @param the point
  * @param the value of y
  * @return void
  */
 
-void ecpts_set_x (*ecpts_t pts, mpz_t y) ;
+void ecpts_set_y (*ecpts_t pts, mpz_t y) ;
 
 /**
- * @brief set the both x and y
- * @param the points
+ * @brief set both x and y
+ * @param the point
  * @param the value of x
  * @param the value of y
  * @return void
  */
 
-void ecpts_set_x (*ecpts_t pts, mpz_t x,  mpz_t y) ;
+void ecpts_set_all (*ecpts_t pts, mpz_t x, mpz_t y) ;
+
 
 #endif /* __ZPTS_H */
 
