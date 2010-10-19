@@ -32,7 +32,7 @@ TEST_DEPS = #$(addprefix $(SRC_TEST), test_zpts.c)
 #Compiler
 CC = gcc
 # GCC flags
-CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include
+CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
 
 # By default indent, build the project, the project and the doc
 all: link linktest indent doc
