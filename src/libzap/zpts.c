@@ -45,8 +45,8 @@ ecpts_create(mpz_t x, mpz_t y)
     ecpts_t        *pts;
 
     pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
-    mpz_init(pts->x);           /* initialize the x coordinate */
-    mpz_init(pts->y);           /* initialize the y coordinate */
+    mpz_init_set(pts->x, x);           /* initialize the x coordinate */
+    mpz_init_set(pts->y,y);           /* initialize the y coordinate */
 
     return pts;                 /* returne the pointer */
 }
