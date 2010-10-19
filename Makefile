@@ -70,7 +70,7 @@ $(BIN)/testzap: $(OBJS_LIB) $(OBJS_TEST)
 
 
 # Indent everything
-IDT_OPT=-gnu -bli0 -npcs -c33 -di16 -nut
+IDT_OPT=-orig -di16 -nut
 
 indent:
 	indent $(IDT_OPT) $(SRC)/include/*.h
