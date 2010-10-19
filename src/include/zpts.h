@@ -43,9 +43,9 @@
  */
 typedef struct _ECPTS
 {
-   mpz_t x ; /*!< x coordinate */
-   mpz_t y ; /*!< y coordinate */
-} ecpts_t
+  mpz_t           x;            /*!< x coordinate */
+  mpz_t           y;            /*!< y coordinate */
+} ecpts_t;
 
 /*
  * Functions
@@ -58,23 +58,33 @@ typedef struct _ECPTS
  * @return a pointer to an ecpts_t or NULL if there was an error
  */
 
-*ecpts_t ecpts_create (mpz_t x, mpz_t y) ;
+ecpts_t        *ecpts_create(mpz_t x, mpz_t y);
 
 /**
- * @brief return the value of x, the returned value is safe to modify
+ * @brief Deallocate a point
  * @param the point
- * @return a pointer to the x value
+ * @return void
  */
 
-*mpz_t ecpts_get_x (*ecpts_t pts) ;
+void            ecpts_destroy(ecpts_t * pts);
 
 /**
- * @brief return the value of y, the returned value is safe to modify
+ * @brief return the value of x
+ * @param the mpz_t that will hold x, this mpz_t has to be initialized
  * @param the point
- * @return a pointer to the y value
+ * @return void
  */
 
-*mpz_t ecpts_get_y (*ecpts_t pts) ;
+void            ecpts_get_x(mpz_t x, ecpts_t * pts);
+
+/**
+ * @brief return the value of y
+ * @param the mpz_t that will hold y, this mpz_t has to be initialized
+ * @param the point
+ * @return void
+ */
+
+void            ecpts_get_y(mpz_t y, ecpts_t * pts);
 
 /**
  * @brief set the value of x
@@ -83,7 +93,7 @@ typedef struct _ECPTS
  * @return void
  */
 
-void ecpts_set_x (*ecpts_t pts, mpz_t x) ;
+void            ecpts_set_x(ecpts_t * pts, mpz_t x);
 
 /**
  * @brief set the value of y
@@ -92,7 +102,7 @@ void ecpts_set_x (*ecpts_t pts, mpz_t x) ;
  * @return void
  */
 
-void ecpts_set_y (*ecpts_t pts, mpz_t y) ;
+void            ecpts_set_y(ecpts_t * pts, mpz_t y);
 
 /**
  * @brief set both x and y
@@ -102,8 +112,6 @@ void ecpts_set_y (*ecpts_t pts, mpz_t y) ;
  * @return void
  */
 
-void ecpts_set_all (*ecpts_t pts, mpz_t x, mpz_t y) ;
-
+void            ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y);
 
 #endif /* __ZPTS_H */
-
