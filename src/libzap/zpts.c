@@ -42,13 +42,13 @@
 ecpts_t        *
 ecpts_create(mpz_t x, mpz_t y)
 {
-  ecpts_t        *pts;
+    ecpts_t        *pts;
 
-  pts = (ecpts_t *) malloc(sizeof(ecpts_t));    /* alloc the point */
-  mpz_init(pts->x);             /* initialize the x coordinate */
-  mpz_init(pts->y);             /* initialize the y coordinate */
+    pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
+    mpz_init(pts->x);           /* initialize the x coordinate */
+    mpz_init(pts->y);           /* initialize the y coordinate */
 
-  return pts;                   /* returne the pointer */
+    return pts;                 /* returne the pointer */
 }
 
 /**
@@ -60,9 +60,9 @@ ecpts_create(mpz_t x, mpz_t y)
 void
 ecpts_destroy(ecpts_t * pts)
 {
-  mpz_clears(pts->x, pts->y);   /* clean the coordinate */
+    mpz_clears(pts->x, pts->y); /* clean the coordinate */
 
-  free(pts);                    /* free the memory */
+    free(pts);                  /* free the memory */
 }
 
 /**
@@ -75,7 +75,7 @@ ecpts_destroy(ecpts_t * pts)
 void
 ecpts_get_x(mpz_t x, ecpts_t * pts)
 {
-  mpz_set(x, pts->x);
+    mpz_set(x, pts->x);
 }
 
 /**
@@ -88,7 +88,7 @@ ecpts_get_x(mpz_t x, ecpts_t * pts)
 void
 ecpts_get_y(mpz_t y, ecpts_t * pts)
 {
-  mpz_set(y, pts->y);
+    mpz_set(y, pts->y);
 }
 
 
@@ -102,7 +102,7 @@ ecpts_get_y(mpz_t y, ecpts_t * pts)
 void
 ecpts_set_x(ecpts_t * pts, mpz_t x)
 {
-  mpz_set(pts->x, x);
+    mpz_set(pts->x, x);
 }
 
 /**
@@ -115,7 +115,7 @@ ecpts_set_x(ecpts_t * pts, mpz_t x)
 void
 ecpts_set_y(ecpts_t * pts, mpz_t y)
 {
-  mpz_set(pts->y, y);
+    mpz_set(pts->y, y);
 }
 
 /**
@@ -129,6 +129,6 @@ ecpts_set_y(ecpts_t * pts, mpz_t y)
 void
 ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y)
 {
-  ecpts_set_x(pts, x);
-  ecpts_set_y(pts, y);
+    ecpts_set_x(pts, x);
+    ecpts_set_y(pts, y);
 }

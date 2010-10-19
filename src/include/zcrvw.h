@@ -43,17 +43,19 @@
  * the coordinates of a point G belonging to the curve.
  * A curve is such that y^2 = x^3 + a4 ∗ x + a6
  */
-typedef struct _ECCRVW
-{
-  mpz_t           p;
-  mpz_t           n;            /*!< the number of Fp-rational points of the curve */
-  mpz_t           a4;
-  mpz_t           a6;
-  mpz_t           r4;
-  mpz_t           r6;
-  mpz_t           gx;           /*!< x coordinate of the g point of the curve */
-  mpz_t           gy;           /*!< y coordinate of the g point of the curve */
-  mpz_t           r;
+typedef struct _ECCRVW {
+    mpz_t           p;
+    mpz_t           n;          /* !< the number of Fp-rational points of
+                                 * the curve */
+    mpz_t           a4;
+    mpz_t           a6;
+    mpz_t           r4;
+    mpz_t           r6;
+    mpz_t           gx;         /* !< x coordinate of the g point of the
+                                 * curve */
+    mpz_t           gy;         /* !< y coordinate of the g point of the
+                                 * curve */
+    mpz_t           r;
 } eccrvw_t
 /*
  * Functions
@@ -71,9 +73,33 @@ typedef struct _ECCRVW
  * @param the r value
  * @return a pointer to an eccrvw_t or NULL if there was an error
  */
-*               eccrvw_t eccrvw_create(mpz_t p, mpz_t n, mpz_t a4, mpz_t a6
-                                       mpz_t r4, mpz_t r6, mpz_t gx, mpz_t gy,
-                                       mpz_t r);
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    eccrvw_t * eccrvw_create(mpz_t p, mpz_t n, mpz_t a4, mpz_t a6
+                             mpz_t r4, mpz_t r6, mpz_t gx, mpz_t gy,
+                             mpz_t r);
+
+/**
+ * @brief Deallocate a curve
+ * @param the curve
+ * @return void
+ */
+
+void            eccrvw_destroy(eccrvw_t * crv);
+
 
 /**
  * @brief return the value of p, the returned value is safe to modify
@@ -81,7 +107,7 @@ typedef struct _ECCRVW
  * @return a pointer to the p value
  */
 
-*mpz_t eccrvw_get_p(*eccrvw_t crv);
+void            eccrvw_get_p(mpz_t p, eccrvw_t * crv);
 
 /**
  * @brief return the value of n, the returned value is safe to modify
@@ -89,7 +115,7 @@ typedef struct _ECCRVW
  * @return a pointer to the n value
  */
 
-*mpz_t eccrvw_get_n(*eccrvw_t crv);
+void            eccrvw_get_n(mpz_t n, eccrvw_t * crv);
 
 /**
  * @brief return the value of a4, the returned value is safe to modify
@@ -97,7 +123,7 @@ typedef struct _ECCRVW
  * @return a pointer to the a4 value
  */
 
-*mpz_t eccrvw_get_a4(*eccrvw_t crv);
+void            eccrvw_get_a4(mpz_t a4, eccrvw_t * crv);
 
 /**
  * @brief return the value of a6, the returned value is safe to modify
@@ -105,7 +131,7 @@ typedef struct _ECCRVW
  * @return a pointer to the a6 value
  */
 
-*mpz_t eccrvw_get_a6(*eccrvw_t crv);
+void            eccrvw_get_a6(mpz_t a6, eccrvw_t * crv);
 
 /**
  * @brief return the value of r4, the returned value is safe to modify
@@ -113,7 +139,7 @@ typedef struct _ECCRVW
  * @return a pointer to the r4 value
  */
 
-*mpz_t eccrvw_get_r4(*eccrvw_t crv);
+void            eccrvw_get_r4(mpz_t r4, eccrvw_t * crv);
 
 /**
  * @brief return the value of r6, the returned value is safe to modify
@@ -121,7 +147,7 @@ typedef struct _ECCRVW
  * @return a pointer to the r6 value
  */
 
-*mpz_t eccrvw_get_r6(*eccrvw_t crv);
+void            eccrvw_get_r6(mpz_t r6, eccrvw_t * crv);
 
 /**
  * @brief return the value of gx, the returned value is safe to modify
@@ -129,7 +155,7 @@ typedef struct _ECCRVW
  * @return a pointer to the gx value
  */
 
-*mpz_t eccrvw_get_gx(*eccrvw_t crv);
+void            eccrvw_get_gx(mpz_t gx, eccrvw_t * crv);
 
 /**
  * @brief return the value of gy, the returned value is safe to modify
@@ -137,7 +163,7 @@ typedef struct _ECCRVW
  * @return a pointer to the gy value
  */
 
-*mpz_t eccrvw_get_gy(*eccrvw_t crv);
+void            eccrvw_get_gy(mpz_t gy, eccrvw_t * crv);
 
 /**
  * @brief return the value of r, the returned value is safe to modify
@@ -145,7 +171,7 @@ typedef struct _ECCRVW
  * @return a pointer to the r value
  */
 
-*mpz_t eccrvw_get_r(*eccrvw_t crv);
+void            eccrvw_get_r(mpz_t r, eccrvw_t * crv);
 
 
 /**
@@ -155,7 +181,7 @@ typedef struct _ECCRVW
  * @return void
  */
 
-void            eccrvw_set_p(*eccrvw_t crv, mpz_t p);
+void            eccrvw_set_p(eccrvw_t * crv, mpz_t p);
 
 /**
  * @brief set the value of n
@@ -164,7 +190,7 @@ void            eccrvw_set_p(*eccrvw_t crv, mpz_t p);
  * @return void
  */
 
-void            eccrvw_set_n(*eccrvw_t crv, mpz_t n);
+void            eccrvw_set_n(eccrvw_t * crv, mpz_t n);
 
 /**
  * @brief set the value of a4
@@ -173,7 +199,7 @@ void            eccrvw_set_n(*eccrvw_t crv, mpz_t n);
  * @return void
  */
 
-void            eccrvw_set_a4(*eccrvw_t crv, mpz_t a4);
+void            eccrvw_set_a4(eccrvw_t * crv, mpz_t a4);
 
 /**
  * @brief set the value of a6
@@ -182,7 +208,7 @@ void            eccrvw_set_a4(*eccrvw_t crv, mpz_t a4);
  * @return void
  */
 
-void            eccrvw_set_a6(*eccrvw_t crv, mpz_t a6);
+void            eccrvw_set_a6(eccrvw_t * crv, mpz_t a6);
 
 /**
  * @brief set the value of r4
@@ -191,7 +217,7 @@ void            eccrvw_set_a6(*eccrvw_t crv, mpz_t a6);
  * @return void
  */
 
-void            eccrvw_set_r4(*eccrvw_t crv, mpz_t r4);
+void            eccrvw_set_r4(eccrvw_t * crv, mpz_t r4);
 
 /**
  * @brief set the value of r6
@@ -200,7 +226,7 @@ void            eccrvw_set_r4(*eccrvw_t crv, mpz_t r4);
  * @return void
  */
 
-void            eccrvw_set_r6(*eccrvw_t crv, mpz_t r6);
+void            eccrvw_set_r6(eccrvw_t * crv, mpz_t r6);
 
 /**
  * @brief set the value of gx
@@ -209,7 +235,7 @@ void            eccrvw_set_r6(*eccrvw_t crv, mpz_t r6);
  * @return void
  */
 
-void            eccrvw_set_gx(*eccrvw_t crv, mpz_t gx);
+void            eccrvw_set_gx(eccrvw_t * crv, mpz_t gx);
 
 /**
  * @brief set the value of gy
@@ -218,7 +244,7 @@ void            eccrvw_set_gx(*eccrvw_t crv, mpz_t gx);
  * @return void
  */
 
-void            eccrvw_set_gy(*eccrvw_t crv, mpz_t gy);
+void            eccrvw_set_gy(eccrvw_t * crv, mpz_t gy);
 
 /**
  * @brief set the value of r
@@ -227,7 +253,7 @@ void            eccrvw_set_gy(*eccrvw_t crv, mpz_t gy);
  * @return void
  */
 
-void            eccrvw_set_r(*eccrvw_t crv, mpz_t r);
+void            eccrvw_set_r(eccrvw_t * crv, mpz_t r);
 
 /**
  * @brief set all parameters
@@ -245,8 +271,8 @@ void            eccrvw_set_r(*eccrvw_t crv, mpz_t r);
  * @return void
  */
 
-void            eccrvw_set_all(*eccrvw_t crv, mpz_t p, mpz_t n,
+void            eccrvw_set_all(eccrvw_t * crv, mpz_t p, mpz_t n,
                                mpz_t a4, mpz_t a6, mpz_t r4,
                                mpz_t r6, mpz_t gx, mpz_t gy, mpz_t r);
 
-#endif /* __ZCRVW_H */
+#endif                          /* __ZCRVW_H */

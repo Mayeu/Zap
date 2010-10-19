@@ -41,10 +41,9 @@
  * This structure represent a point of an elliptic curve. This point is
  * determine by two coordinate that are define on Z
  */
-typedef struct _ECPTS
-{
-  mpz_t           x;            /*!< x coordinate */
-  mpz_t           y;            /*!< y coordinate */
+typedef struct _ECPTS {
+    mpz_t           x;          /* !< x coordinate */
+    mpz_t           y;          /* !< y coordinate */
 } ecpts_t;
 
 /*
@@ -114,4 +113,4 @@ void            ecpts_set_y(ecpts_t * pts, mpz_t y);
 
 void            ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y);
 
-#endif /* __ZPTS_H */
+#endif                          /* __ZPTS_H */
