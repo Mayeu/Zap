@@ -33,9 +33,10 @@ TEST_DEPS = #$(addprefix $(SRC_TEST), test_zpts.c)
 CC = gcc
 # GCC flags
 CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
+LDFLAGS = -lgmp
 
 # By default indent, build the project, the project and the doc
-all: link linktest indent doc
+all: indent link linktest doc
 
 # Lib
 lib: $(OBJS_LIB)
@@ -59,13 +60,13 @@ $(BUILD)/%.o: $(SRC_ZAP)/%.c
 link: $(BIN)/zap zap lib
 
 $(BIN)/zap: $(OBJS_ZAP) $(OBJS_LIB)
-	$(LD) $(ARCH) -o $@ $^
+	$(LD) $(LDFLAGS) -o $@ $^
 
 # Link Test
 link: $(BIN)/testzap test lib
 
 $(BIN)/testzap: $(OBJS_LIB) $(OBJS_TEST)
-	$(LD) $(ARCH) -o $@ $^
+	$(LD) $(LDFLAGS) -o $@ $^
 
 
 # Indent everything
@@ -74,11 +75,11 @@ IDT_OPT=-gnu -bli0 -npcs -c33 -di16 -nut
 indent:
 	indent $(IDT_OPT) $(SRC)/include/*.h
 	indent $(IDT_OPT) $(SRC_ZAP)/*.c
-	indent $(IDT_OPT) $(SRC_ZAP)/*.h
+#	indent $(IDT_OPT) $(SRC_ZAP)/*.h
 	indent $(IDT_OPT) $(SRC_LIB)/*.c
-	indent $(IDT_OPT) $(SRC_LIB)/*.h
-	indent $(IDT_OPT) $(SRC_TEST)/*.c
-	indent $(IDT_OPT) $(SRC_TEST)/*.h
+#	indent $(IDT_OPT) $(SRC_LIB)/*.h
+#	indent $(IDT_OPT) $(SRC_TEST)/*.c
+#	indent $(IDT_OPT) $(SRC_TEST)/*.h
 
 # Doc
 doc :
