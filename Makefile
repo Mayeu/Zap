@@ -24,7 +24,7 @@ BIN = $(PROJECT_DIR)/bin
 BUILD = $(PROJECT_DIR)/build
 
 # Object files
-OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zopts.o)
+OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
 OBJS_TEST = #$(addprefix $(BUILD)/, test_zpts.o)
 TEST_DEPS = #$(addprefix $(SRC_TEST), test_zpts.c)
