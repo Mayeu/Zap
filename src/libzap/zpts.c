@@ -40,13 +40,17 @@
  */
 
 ecpts_t        *
-ecpts_create(mpz_t x, mpz_t y)
+ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
 {
     ecpts_t        *pts;
 
     pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
-    mpz_init_set(pts->x, x);           /* initialize the x coordinate */
-    mpz_init_set(pts->y,y);           /* initialize the y coordinate */
+    mpz_init(pts->x);           /* initialize the x coordinate */
+    mpz_init(pts->y);           /* initialize the y coordinate */
+
+    if (!ecpts_set_all(pts, x, y, C))
+        return NULL;            /* if the set fail, for exemple, in case C 
+                                 * is NULL */
 
     return pts;                 /* returne the pointer */
 }
@@ -62,35 +66,11 @@ ecpts_destroy(ecpts_t * pts)
 {
     mpz_clears(pts->x, pts->y); /* clean the coordinate */
 
+    eccrvw_destroy(pts->C);
+    pts->C = null;
+
     free(pts);                  /* free the memory */
 }
-
-/**
- * @brief return the value of x
- * @param the mpz_t that will hold x, this mpz_t has to be initialized
- * @param the point
- * @return void
- */
-
-void
-ecpts_get_x(mpz_t x, ecpts_t * pts)
-{
-    mpz_set(x, pts->x);
-}
-
-/**
- * @brief return the value of y
- * @param the mpz_t that will hold y, this mpz_t has to be initialized
- * @param the point
- * @return void
- */
-
-void
-ecpts_get_y(mpz_t y, ecpts_t * pts)
-{
-    mpz_set(y, pts->y);
-}
-
 
 /**
  * @brief set the value of x
@@ -119,16 +99,37 @@ ecpts_set_y(ecpts_t * pts, mpz_t y)
 }
 
 /**
+ * @brief set the curve of the point
+ * @param the point
+ * @param the curve
+ * @return EINVAL if C is NULL,EXIT_SUCCESS either
+ */
+
+int
+ecpts_set_curve(ecpts_t * pts, eccrvw_t * C)
+{
+    if (C == NULL)
+        return EINVAL;
+
+    pts->C = C;
+
+    return EXIT_SUCCESS;
+}
+
+/**
  * @brief set both x and y
  * @param the point
  * @param the value of x
  * @param the value of y
- * @return void
+ * @param the curve
+ * @return EINVAL if C is NULL,EXIT_SUCCESS either
  */
 
-void
-ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y)
+int
+ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y, eccrvw_t * C)
 {
     ecpts_set_x(pts, x);
     ecpts_set_y(pts, y);
+
+    return ecpts_set_curve(pts, C);
 }

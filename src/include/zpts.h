@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <gmp.h>
+#include <errno.h>
+#include "zcrvw.h"
 
 /*
  * Define
@@ -44,6 +46,7 @@
 typedef struct _ECPTS {
     mpz_t           x;          /* !< x coordinate */
     mpz_t           y;          /* !< y coordinate */
+    eccrvw_t       *C;          /* !< the curve associated to this point */
 } ecpts_t;
 
 /*
@@ -54,10 +57,11 @@ typedef struct _ECPTS {
  * @brief Allocate and initialize a point
  * @param the x value
  * @param the y value
+ * @param the curve structure
  * @return a pointer to an ecpts_t or NULL if there was an error
  */
 
-ecpts_t        *ecpts_create(mpz_t x, mpz_t y);
+ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C);
 
 /**
  * @brief Deallocate a point
@@ -66,24 +70,6 @@ ecpts_t        *ecpts_create(mpz_t x, mpz_t y);
  */
 
 void            ecpts_destroy(ecpts_t * pts);
-
-/**
- * @brief return the value of x
- * @param the mpz_t that will hold x, this mpz_t has to be initialized
- * @param the point
- * @return void
- */
-
-void            ecpts_get_x(mpz_t x, ecpts_t * pts);
-
-/**
- * @brief return the value of y
- * @param the mpz_t that will hold y, this mpz_t has to be initialized
- * @param the point
- * @return void
- */
-
-void            ecpts_get_y(mpz_t y, ecpts_t * pts);
 
 /**
  * @brief set the value of x
@@ -104,13 +90,24 @@ void            ecpts_set_x(ecpts_t * pts, mpz_t x);
 void            ecpts_set_y(ecpts_t * pts, mpz_t y);
 
 /**
+ * @brief set the curve of the point
+ * @param the point
+ * @param the curve
+ * @return EINVAL if C is NULL SUCCESS either
+ */
+
+int             ecpts_set_curve(ecpts_t * pts, eccrvw_t * C);
+
+/**
  * @brief set both x and y
  * @param the point
  * @param the value of x
  * @param the value of y
- * @return void
+ * @param the curve
+ * @return EINVAL if C is NULL,EXIT_SUCCESS either
  */
 
-void            ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y);
+int             ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y,
+                              eccrvw_t * C);
 
 #endif                          /* __ZPTS_H */
