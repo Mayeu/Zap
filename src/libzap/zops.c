@@ -45,12 +45,13 @@ void
 zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
 {
     mpz_t           X,
-                    lmbd;
+                    lmbd,
+                    tmp;
     eccrvw_t       *C;          /* the curve of the points */
 
     C = P->C;
 
-    mpz_inits(X, lmbd);
+    mpz_inits(X, lmbd, tmp);
 
     /*
      * X
@@ -61,7 +62,8 @@ zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
      * lmbd
      */
     mpz_add(lmbd, P->y, Q->y);  /* lmbd = yp + yq */
-    mpz_divexact(lmbd, lmbd, X);        /* lmbd = (yp + yq) / X */
+    mpz_invert(tmp, X, C->p) ; /* tmp = X^-1 */
+    mpz_mul(lmbd, lmbd, X);        /* lmbd = (yp + yq) * X^-1 */
 
     /*
      * xr
@@ -100,9 +102,16 @@ zinvert(ecpts_t * R, ecpts_t * P)
 
     C = P->C;
 
+    /*
+     * xr
+     */
     mpz_set(R->x, P->x);
-    mpz_add(R->x, P->x, P->y);
-    mpz_mod(R->x, R->x, C->p);
+
+    /*
+     * yr
+     */
+    mpz_add(R->y, P->x, P->y);
+    mpz_mod(R->y, R->y, C->p);
 
     return;
 }
