@@ -64,6 +64,15 @@ typedef struct _ECPTS {
 ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C);
 
 /**
+ * @brief Copy a point in an other
+ * @param the destination point
+ * @param the source point
+ * @result
+ */
+
+void ecpts_cpy(ecpts_t * D, ecpts_t * S) ;
+
+/**
  * @brief Deallocate a point
  * @param the point
  * @return void
