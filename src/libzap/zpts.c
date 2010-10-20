@@ -65,9 +65,9 @@ ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
 void
 ecpts_cpy(ecpts_t * D, ecpts_t * S)
 {
-    mpz_set(R->x, P->x);
-    mpz_set(R->y, P->y);
-    R->C = P->C;
+    mpz_set(D->x, S->x);
+    mpz_set(D->y, S->y);
+    D->C = S->C;
 }
 
 /**
