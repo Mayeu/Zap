@@ -83,7 +83,7 @@ zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
     mpz_add(R->y, R->y, P->y);  /* yr = (lmbd + 1) * xr + lmbd*xp + yp */
     mpz_mod(R->y, R->y, C->p);  /* Stay in your division ring ! */
 
-    return ;
+    return;
 }
 
 /*
@@ -96,15 +96,15 @@ zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
 void
 zinvert(ecpts_t * R, ecpts_t * P)
 {
-   eccrvw_t *C ;
+    eccrvw_t       *C;
 
-   C = P->C ;
+    C = P->C;
 
-   mpz_set(R->x, P->x) ;
-   mpz_add(R->x, P->x, P->y) ;
-   mpz_mod(R->x, R->x, C->p) ;
+    mpz_set(R->x, P->x);
+    mpz_add(R->x, P->x, P->y);
+    mpz_mod(R->x, R->x, C->p);
 
-   return ;
+    return;
 }
 
 /*
@@ -117,34 +117,34 @@ zinvert(ecpts_t * R, ecpts_t * P)
 void
 zdouble(ecpts_t * R, ecpts_t * P)
 {
-   mpz_t lmbd ;
-   eccrvw_t *C ;
+    mpz_t           lmbd;
+    eccrvw_t       *C;
 
-   C= P->C ;
+    C = P->C;
 
-   /*
-    * Lambda
-    */
-   mpz_divexact(lmbd, P->y, P->x) ; /* lmbd = yp/xp */
-   mpz_add(lmbd, lmbd, P->x ) ; /* lmbd = xp + yp/xy */
+    /*
+     * Lambda
+     */
+    mpz_divexact(lmbd, P->y, P->x);     /* lmbd = yp/xp */
+    mpz_add(lmbd, lmbd, P->x);  /* lmbd = xp + yp/xy */
 
-   /*
-    * xr
-    */
-   mpz_mul(R->x, lmbd, lmbd) ; /* xr = lmbd^2 */
-   mpz_add(R->x, R->x, lmbd) ; /* xr = lmbd^2 + lmbd */
-   mpz_mod(R->x, R->x, C->p) ;
+    /*
+     * xr
+     */
+    mpz_mul(R->x, lmbd, lmbd);  /* xr = lmbd^2 */
+    mpz_add(R->x, R->x, lmbd);  /* xr = lmbd^2 + lmbd */
+    mpz_mod(R->x, R->x, C->p);
 
-   /*
-    * yr
-    */
-   mpz_mul(R->y, P->x, P->x) ; /* yr = xp^2 */
-   mpz_mul(lmbd, lmbd, R->x) ; /* lmbd = lmbd * xr */
-   mpz_add(R->y, R->y, lmbd) ; /* yr = xp^2 + lmbd * xr */
-   mpz_add(R->y, R->y, R->x) ; /* yr = xp^2 + lmbd * xr + xr */
-   mpz_mod(R->x, R->x, C->p) ;
+    /*
+     * yr
+     */
+    mpz_mul(R->y, P->x, P->x);  /* yr = xp^2 */
+    mpz_mul(lmbd, lmbd, R->x);  /* lmbd = lmbd * xr */
+    mpz_add(R->y, R->y, lmbd);  /* yr = xp^2 + lmbd * xr */
+    mpz_add(R->y, R->y, R->x);  /* yr = xp^2 + lmbd * xr + xr */
+    mpz_mod(R->x, R->x, C->p);
 
-   return ;
+    return;
 }
 
 /*
@@ -156,6 +156,20 @@ zdouble(ecpts_t * R, ecpts_t * P)
  */
 
 void
-zmult(ecpts_t * R, ecpts_t * P, mpz_t x)
+zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
 {
+    char           *nb;
+
+    nb = NULL;
+
+    nb = mpz_get_str(nb, 2, k); /* we convert k into a string of bit */
+
+    ecpts_cpy(R, P);
+
+    /*
+     * we start at n-1 bit
+     */
+    while (++nb != NULL) {
+    }
+
 }

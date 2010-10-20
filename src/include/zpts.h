@@ -70,7 +70,7 @@ ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C);
  * @result
  */
 
-void ecpts_cpy(ecpts_t * D, ecpts_t * S) ;
+void            ecpts_cpy(ecpts_t * D, ecpts_t * S);
 
 /**
  * @brief Deallocate a point
