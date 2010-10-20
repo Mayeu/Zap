@@ -93,7 +93,7 @@ void            ecpts_set_y(ecpts_t * pts, mpz_t y);
  * @brief set the curve of the point
  * @param the point
  * @param the curve
- * @return EINVAL if C is NULL SUCCESS either
+ * @return EINVAL if C is NULL, EXIT_SUCCESS either
  */
 
 int             ecpts_set_curve(ecpts_t * pts, eccrvw_t * C);

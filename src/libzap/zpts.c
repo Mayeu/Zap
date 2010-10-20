@@ -48,7 +48,7 @@ ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
     mpz_init(pts->x);           /* initialize the x coordinate */
     mpz_init(pts->y);           /* initialize the y coordinate */
 
-    if (!ecpts_set_all(pts, x, y, C))
+    if (ecpts_set_all(pts, x, y, C) != EXIT_SUCCESS)
         return NULL;            /* if the set fail, for exemple, in case C 
                                  * is NULL */
 
@@ -67,7 +67,7 @@ ecpts_destroy(ecpts_t * pts)
     mpz_clears(pts->x, pts->y); /* clean the coordinate */
 
     eccrvw_destroy(pts->C);
-    pts->C = null;
+    pts->C = NULL;
 
     free(pts);                  /* free the memory */
 }
