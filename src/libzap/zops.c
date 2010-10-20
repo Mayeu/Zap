@@ -156,6 +156,20 @@ zdouble(ecpts_t * R, ecpts_t * P)
  */
 
 void
-zmult(ecpts_t * R, ecpts_t * P, mpz_t x)
+zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
 {
+    char           *nb;
+
+    nb = NULL;
+
+    nb = mpz_get_str(nb, 2, k); /* we convert k into a string of bit */
+
+    ecpts_cpy(R, P);
+
+    /*
+     * we start at n-1 bit
+     */
+    while (++nb != NULL) {
+    }
+
 }

@@ -56,6 +56,21 @@ ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
 }
 
 /**
+ * @brief Copy a point in an other
+ * @param the destination point
+ * @param the source point
+ * @result
+ */
+
+void
+ecpts_cpy(ecpts_t * D, ecpts_t * S)
+{
+    mpz_set(R->x, P->x);
+    mpz_set(R->y, P->y);
+    R->C = P->C;
+}
+
+/**
  * @brief Deallocate a point
  * @param the point
  * @return void
