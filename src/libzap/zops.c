@@ -41,13 +41,49 @@
  * @result void
  */
 
-void            zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
+void
+zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
 {
-   mpz_t  X ;
+    mpz_t           X,
+                    lmbd;
+    eccrvw_t       *C;          /* the curve of the points */
 
-   mpz_init (X) ;
+    C = P->C;
 
-   mpz_add(X, P->x, Q->x) ;
+    mpz_inits(X, lmbd);
+
+    /*
+     * X
+     */
+    mpz_add(X, P->x, Q->x);     /* X = xp + xq */
+
+    /*
+     * lmbd
+     */
+    mpz_add(lmbd, P->y, Q->y);  /* lmbd = yp + yq */
+    mpz_divexact(lmbd, lmbd, X);        /* lmbd = (yp + yq) / X */
+
+    /*
+     * xr
+     */
+    mpz_mul(R->x, lmbd, lmbd);  /* xr = lmbd^2 */
+    mpz_add(R->x, R->x, lmbd);  /* xr = lmbd^2 + lmbd */
+    mpz_add(R->x, R->x, X);     /* xr = lmbd^2 + lmbd + X */
+    mpz_mod(R->x, R->x, C->p);  /* Stay in your division ring ! */
+
+    /*
+     * yr
+     */
+    mpz_add_ui(R->y, lmbd, 1);  /* yr = (lmbd + 1) */
+    mpz_mul(R->y, R->y, R->x);  /* yr = (lmbd + 1) * xr */
+    mpz_mul(lmbd, lmbd, P->x);  /* lmbd = lmbd * xp ; we can * use lmbd to 
+                                 * temp the value * since it will not be
+                                 * reuse. */
+    mpz_add(R->y, R->y, lmbd);  /* yr = (lmbd + 1) * xr + * lmbd*xp */
+    mpz_add(R->y, R->y, P->y);  /* yr = (lmbd + 1) * xr + lmbd*xp + yp */
+    mpz_mod(R->y, R->y, C->p);  /* Stay in your division ring ! */
+
+    return ;
 }
 
 /*
@@ -57,8 +93,19 @@ void            zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
  * @result void
  */
 
-void            zinvert(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
-{}
+void
+zinvert(ecpts_t * R, ecpts_t * P)
+{
+   eccrvw_t *C ;
+
+   C = P->C ;
+
+   mpz_set(R->x, P->x) ;
+   mpz_add(R->x, P->x, P->y) ;
+   mpz_mod(R->x, R->x, C->p) ;
+
+   return ;
+}
 
 /*
  * @brief Calculate the double of a point
@@ -67,8 +114,38 @@ void            zinvert(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
  * @result void
  */
 
-void            zdouble(ecpts_t * R, ecpts_t * P)
-{}
+void
+zdouble(ecpts_t * R, ecpts_t * P)
+{
+   mpz_t lmbd ;
+   eccrvw_t *C ;
+
+   C= P->C ;
+
+   /*
+    * Lambda
+    */
+   mpz_divexact(lmbd, P->y, P->x) ; /* lmbd = yp/xp */
+   mpz_add(lmbd, lmbd, P->x ) ; /* lmbd = xp + yp/xy */
+
+   /*
+    * xr
+    */
+   mpz_mul(R->x, lmbd, lmbd) ; /* xr = lmbd^2 */
+   mpz_add(R->x, R->x, lmbd) ; /* xr = lmbd^2 + lmbd */
+   mpz_mod(R->x, R->x, C->p) ;
+
+   /*
+    * yr
+    */
+   mpz_mul(R->y, P->x, P->x) ; /* yr = xp^2 */
+   mpz_mul(lmbd, lmbd, R->x) ; /* lmbd = lmbd * xr */
+   mpz_add(R->y, R->y, lmbd) ; /* yr = xp^2 + lmbd * xr */
+   mpz_add(R->y, R->y, R->x) ; /* yr = xp^2 + lmbd * xr + xr */
+   mpz_mod(R->x, R->x, C->p) ;
+
+   return ;
+}
 
 /*
  * @brief Calculate the multiplication between a point and a scalar
@@ -78,6 +155,7 @@ void            zdouble(ecpts_t * R, ecpts_t * P)
  * @result
  */
 
-void            zmult(ecpts_t * R, ecpts_t * P, mpz_t x)
-{}
-
+void
+zmult(ecpts_t * R, ecpts_t * P, mpz_t x)
+{
+}

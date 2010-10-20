@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include "zpts.h"
+#include "zcrvw.h"
 
 /*
  * Define
@@ -56,7 +57,7 @@ void            zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q);
  * @result void
  */
 
-void            zinvert(ecpts_t * R, ecpts_t * P, ecpts_t * Q);
+void            zinvert(ecpts_t * R, ecpts_t * P);
 
 /*
  * @brief Calculate the double of a point
