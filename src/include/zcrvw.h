@@ -56,7 +56,7 @@ typedef struct _ECCRVW {
     mpz_t           gy;         /* !< y coordinate of the g point of the
                                  * curve */
     mpz_t           r;
-} eccrvw_t
+} eccrvw_t;
 /*
  * Functions
  */
@@ -73,24 +73,10 @@ typedef struct _ECCRVW {
  * @param the r value
  * @return a pointer to an eccrvw_t or NULL if there was an error
  */
- 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    eccrvw_t * eccrvw_create(mpz_t p, mpz_t n, mpz_t a4, mpz_t a6
-                             mpz_t r4, mpz_t r6, mpz_t gx, mpz_t gy,
-                             mpz_t r);
+
+eccrvw_t       *eccrvw_create(mpz_t p, mpz_t n, mpz_t a4, mpz_t a6,
+                              mpz_t r4, mpz_t r6, mpz_t gx, mpz_t gy,
+                              mpz_t r);
 
 /**
  * @brief Deallocate a curve
