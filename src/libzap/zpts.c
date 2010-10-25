@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <gmp.h>
+#include "bool.h"
 #include "zpts.h"
 
 /*
@@ -36,11 +37,13 @@
  * @brief Allocate and initialize a point
  * @param the x value
  * @param the y value
+ * @param pointer to the associated curve
+ * @param boolean to set the infinite point
  * @return a pointer to an ecpts_t or NULL if there was an error
  */
 
 ecpts_t        *
-ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
+ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
 {
     ecpts_t        *pts;
 
@@ -48,7 +51,7 @@ ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C)
     mpz_init(pts->x);           /* initialize the x coordinate */
     mpz_init(pts->y);           /* initialize the y coordinate */
 
-    if (ecpts_set_all(pts, x, y, C) != EXIT_SUCCESS)
+    if (ecpts_set_all(pts, x, y, C, inf) != EXIT_SUCCESS)
         return NULL;            /* if the set fail, for exemple, in case C 
                                  * is NULL */
 
@@ -132,19 +135,75 @@ ecpts_set_curve(ecpts_t * pts, eccrvw_t * C)
 }
 
 /**
- * @brief set both x and y
+ * @brief set if the point is the point at infinity
+ * @param the point
+ * @param boolean for the point at infinity
+ * @return void
+ */
+
+void
+ecpts_set_inf(ecpts_t * pts, bool inf)
+{
+    pts->inf = inf;
+}
+
+/**
+ * @brief set everything
  * @param the point
  * @param the value of x
  * @param the value of y
  * @param the curve
+ * @param bool the set if the point is the point at infinity
  * @return EINVAL if C is NULL,EXIT_SUCCESS either
  */
 
 int
-ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y, eccrvw_t * C)
+ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
 {
     ecpts_set_x(pts, x);
     ecpts_set_y(pts, y);
+    ecpts_set_inf(pts, inf);
 
     return ecpts_set_curve(pts, C);
+}
+
+/**
+ * @brief return if the point is the point at infinity
+ * @param the points
+ * @return the invert of inf value of the points
+ */
+
+bool
+ecpts_is_inf(ecpts_t * pts)
+{
+    if (pts->inf)
+        return false;
+
+    return true;
+}
+
+/**
+ * @brief compare two point to see if there are equals
+ * @param the points
+ * @return true if the points are equals, false either
+ */
+
+bool
+ecpts_are_equals(ecpts_t * P, ecpts_t * Q)
+{
+    /*
+     * If they are the point to infinity we don't need to test anything else
+     */
+    if (P->inf == Q->inf)
+        return true;
+
+    /*
+     * Test everything else
+     */
+    if (mpz_cmp(P->x, Q->x) == 0)
+        if (mpz_cmp(P->y, Q->y) == 0)
+            // if (eccrvw_are_equals(P->C, Q->C))
+            return true;
+
+    return false;
 }
