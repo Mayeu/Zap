@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <errno.h>
+#include "bool.h"
 #include "zcrvw.h"
 
 /*
@@ -47,6 +48,8 @@ typedef struct _ECPTS {
     mpz_t           x;          /* !< x coordinate */
     mpz_t           y;          /* !< y coordinate */
     eccrvw_t       *C;          /* !< the curve associated to this point */
+    bool            inf;        /* !< boolean to know if this point is the 
+                                 * infinite point */
 } ecpts_t;
 
 /*
@@ -57,11 +60,12 @@ typedef struct _ECPTS {
  * @brief Allocate and initialize a point
  * @param the x value
  * @param the y value
- * @param the curve structure
+ * @param pointer to the associated curve
+ * @param boolean to set the infinite point
  * @return a pointer to an ecpts_t or NULL if there was an error
  */
 
-ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C);
+ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C, bool inf);
 
 /**
  * @brief Copy a point in an other
@@ -69,7 +73,6 @@ ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C);
  * @param the source point
  * @result
  */
-
 void            ecpts_cpy(ecpts_t * D, ecpts_t * S);
 
 /**
@@ -108,15 +111,41 @@ void            ecpts_set_y(ecpts_t * pts, mpz_t y);
 int             ecpts_set_curve(ecpts_t * pts, eccrvw_t * C);
 
 /**
- * @brief set both x and y
+ * @brief set if the point is the point at infinity
+ * @param the point
+ * @param boolean for the point at infinity
+ * @return void
+ */
+
+void            ecpts_set_inf(ecpts_t * pts, bool inf);
+
+/**
+ * @brief set everything
  * @param the point
  * @param the value of x
  * @param the value of y
  * @param the curve
+ * @param bool the set if the point is the point at infinity
  * @return EINVAL if C is NULL,EXIT_SUCCESS either
  */
 
 int             ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y,
-                              eccrvw_t * C);
+                              eccrvw_t * C, bool inf);
+
+/**
+ * @brief return if the point is the point at infinity
+ * @param the points
+ * @return inf value of the points
+ */
+
+bool            ecpts_is_inf(ecpts_t * pts);
+
+/**
+ * @brief compare two point to see if there are equals
+ * @param the points
+ * @return true if the points are equals, false either
+ */
+
+bool            ecpts_are_equals(ecpts_t * P, ecpts_t * Q);
 
 #endif                          /* __ZPTS_H */
