@@ -30,11 +30,17 @@
  */
 
 /*
+ * Private functions declaration
+ */
+
+void            add_pts(ecpts_t * R, ecpts_t * P, ecpts_t * Q);
+
+/*
  * Functions
  */
 
 /*
- * @brief Addition two point of the curve
+ * @brief Addition of two points of the curve
  * @param the result point
  * @param the first point to add
  * @param the second point to add
@@ -44,46 +50,56 @@
 void
 zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
 {
-    mpz_t           X,
-                    lmbd,
-                    tmp;
-    eccrvw_t       *C;          /* the curve of the points */
-
-    C = P->C;
-
-    mpz_inits(X, lmbd, tmp);
+    ecpts_t        *tmp;
 
     /*
-     * X
+     * P is the point at infinity
+     * We return Q
      */
-    mpz_add(X, P->x, Q->x);     /* X = xp + xq */
+    if (ecpts_is_inf(P)) {
+        ecpts_cpy(R, Q);
+        return;
+    }
 
     /*
-     * lmbd
+     * Q is the point at infinity
+     * We return P
      */
-    mpz_add(lmbd, P->y, Q->y);  /* lmbd = yp + yq */
-    mpz_invert(tmp, X, C->p) ; /* tmp = X^-1 */
-    mpz_mul(lmbd, lmbd, X);        /* lmbd = (yp + yq) * X^-1 */
+    if (ecpts_is_inf(Q)) {
+        ecpts_cpy(R, P);
+        return;
+    }
 
     /*
-     * xr
+     * We create the point tmp. We arbitrary initiate it with the Q value (to
+     * avoid losing time with other initialisation
      */
-    mpz_mul(R->x, lmbd, lmbd);  /* xr = lmbd^2 */
-    mpz_add(R->x, R->x, lmbd);  /* xr = lmbd^2 + lmbd */
-    mpz_add(R->x, R->x, X);     /* xr = lmbd^2 + lmbd + X */
-    mpz_mod(R->x, R->x, C->p);  /* Stay in your division ring ! */
+    tmp = ecpts_create(Q->x, Q->y, Q->C, Q->inf);
 
     /*
-     * yr
+     * Q is the additive inverse of P
+     * We return the point at infinity
      */
-    mpz_add_ui(R->y, lmbd, 1);  /* yr = (lmbd + 1) */
-    mpz_mul(R->y, R->y, R->x);  /* yr = (lmbd + 1) * xr */
-    mpz_mul(lmbd, lmbd, P->x);  /* lmbd = lmbd * xp ; we can * use lmbd to 
-                                 * temp the value * since it will not be
-                                 * reuse. */
-    mpz_add(R->y, R->y, lmbd);  /* yr = (lmbd + 1) * xr + * lmbd*xp */
-    mpz_add(R->y, R->y, P->y);  /* yr = (lmbd + 1) * xr + lmbd*xp + yp */
-    mpz_mod(R->y, R->y, C->p);  /* Stay in your division ring ! */
+    zinvert(tmp, Q);
+
+    if (ecpts_are_equals(P, tmp)) {
+        ecpts_set_inf(R, true);
+        return;
+    }
+
+    /*
+     * P and Q are equals
+     * We return the double of P
+     */
+    if (ecpts_are_equals(P, Q)) {
+        zdouble(R, P);
+        return;
+    }
+
+    /*
+     * addition
+     */
+    add_pts(R, P, Q);
 
     return;
 }
@@ -176,9 +192,78 @@ zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
     ecpts_cpy(R, P);
 
     /*
+     * if P is the point at infinity, there is nothing to do 
+     */
+    if (ecpts_is_inf(P))
+        return;
+
+    /*
      * we start at n-1 bit
      */
     while (++nb != NULL) {
+        zadd(R, R, R);
+        if (*nb == '1')
+            zadd(R, R, P);
     }
 
+    return;
+}
+
+/*
+ * Private Functions
+ */
+
+/*
+ * @brief Addition of two different points of the curve
+ * @param the result point
+ * @param the first point to add
+ * @param the second point to add
+ * @result void
+ */
+
+void
+add_pts(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
+{
+    mpz_t           X,
+                    lmbd,
+                    tmp;
+    eccrvw_t       *C;          /* the curve of the points */
+
+    C = P->C;
+
+    mpz_inits(X, lmbd, tmp);
+
+    /*
+     * X
+     */
+    mpz_add(X, P->x, Q->x);     /* X = xp + xq */
+
+    /*
+     * lmbd
+     */
+    mpz_add(lmbd, P->y, Q->y);  /* lmbd = yp + yq */
+    mpz_invert(tmp, X, C->p);   /* tmp = X^-1 */
+    mpz_mul(lmbd, lmbd, X);     /* lmbd = (yp + yq) * X^-1 */
+
+    /*
+     * xr
+     */
+    mpz_mul(R->x, lmbd, lmbd);  /* xr = lmbd^2 */
+    mpz_add(R->x, R->x, lmbd);  /* xr = lmbd^2 + lmbd */
+    mpz_add(R->x, R->x, X);     /* xr = lmbd^2 + lmbd + X */
+    mpz_mod(R->x, R->x, C->p);  /* Stay in your division ring ! */
+
+    /*
+     * yr
+     */
+    mpz_add_ui(R->y, lmbd, 1);  /* yr = (lmbd + 1) */
+    mpz_mul(R->y, R->y, R->x);  /* yr = (lmbd + 1) * xr */
+    mpz_mul(lmbd, lmbd, P->x);  /* lmbd = lmbd * xp ; we can * use lmbd to 
+                                 * temp the value * since it will not be
+                                 * reuse. */
+    mpz_add(R->y, R->y, lmbd);  /* yr = (lmbd + 1) * xr + * lmbd*xp */
+    mpz_add(R->y, R->y, P->y);  /* yr = (lmbd + 1) * xr + lmbd*xp + yp */
+    mpz_mod(R->y, R->y, C->p);  /* Stay in your division ring ! */
+
+    return;
 }
