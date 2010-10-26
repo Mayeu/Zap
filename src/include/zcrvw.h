@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <gmp.h>
+#include <bool.h>
 
 /*
  * Define
@@ -260,5 +261,15 @@ void            eccrvw_set_r(eccrvw_t * crv, mpz_t r);
 void            eccrvw_set_all(eccrvw_t * crv, mpz_t p, mpz_t n,
                                mpz_t a4, mpz_t a6, mpz_t r4,
                                mpz_t r6, mpz_t gx, mpz_t gy, mpz_t r);
+
+/**
+ * @brief determines if the 2 curves are equal
+ * @param the elliptic curve
+ * @param the second elliptic curve
+ * @return true if they're equal 
+ *         false otherwise
+ */
+
+bool eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2);
 
 #endif                          /* __ZCRVW_H */
