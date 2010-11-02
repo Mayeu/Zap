@@ -339,3 +339,31 @@ eccrvw_set_all(eccrvw_t * crv, mpz_t p, mpz_t n,
     eccrvw_set_gy(crv, gy);
     eccrvw_set_r(crv, r);
 }
+
+/**
+ * @brief determines if the 2 curves are equal
+ * @param the elliptic curve
+ * @param the second elliptic curve
+ * @return true if they're equal 
+ *         false otherwise
+ */
+
+bool eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2)
+{
+if (mpz_cmp(crv1->p, crv2->p) == 0)
+        if (mpz_cmp(crv1->n, crv2->n) == 0)
+        	if (mpz_cmp(crv1->a4, crv2->a6) == 0)
+        		if (mpz_cmp(crv1->a6, crv2->a6) == 0)
+        			if (mpz_cmp(crv1->r4, crv2->r4) == 0)
+					if (mpz_cmp(crv1->r6, crv2->r6) == 0)
+						if (mpz_cmp(crv1->gx, crv2->gx) == 0)
+							if (mpz_cmp(crv1->gy, crv2->gy) == 0)
+								if (mpz_cmp(crv1->r, crv2->r) == 0)
+
+									return true;
+
+
+    return false;
+
+}
+
