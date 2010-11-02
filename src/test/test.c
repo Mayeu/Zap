@@ -34,15 +34,17 @@ main()
      * NOTE - ORDER IS IMPORTANT - MUST TEST fread() AFTER fprintf() 
      */
     if ((NULL ==
-         CU_add_test(pSuite, "test of eccrvw_create", test_eccrvw_create)
-         CU_add_test(pSuite, "test of eccrvw_create", test_eccrvw_destroy))
-        CU_add_test(pSuite, "test of eccrvw_create",
-                    test_eccrvw_are_equals))
-        )
-            || (NULL == CU_add_test(pSuite, "test of fread()", testFREAD))) {
+         CU_add_test(pSuite, "test of eccrvw_create", test_eccrvw_create))
+        || (NULL ==
+            CU_add_test(pSuite, "test of eccrvw_create",
+                        test_eccrvw_destroy))
+        || (NULL ==
+            CU_add_test(pSuite, "test of eccrvw_create",
+                        test_eccrvw_are_equals))
+        ) {
         CU_cleanup_registry();
         return CU_get_error();
-        }
+    }
 
     /*
      * Run all tests using the CUnit Basic interface 
