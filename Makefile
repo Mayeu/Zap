@@ -26,8 +26,8 @@ BUILD = $(PROJECT_DIR)/build
 # Object files
 OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
-OBJS_TEST = #$(addprefix $(BUILD)/, test_zpts.o)
-TEST_DEPS = #$(addprefix $(SRC_TEST), test_zpts.c)
+OBJS_TEST = $(addprefix $(BUILD)/, test_zpts.o test_zcrvw.o)
+TEST_DEPS = $(addprefix $(SRC_TEST), test_zpts.c test_zcrvw.c)
 
 #Compiler
 CC = gcc
@@ -78,7 +78,7 @@ indent:
 #	indent $(IDT_OPT) $(SRC_ZAP)/*.h
 	indent $(IDT_OPT) $(SRC_LIB)/*.c
 #	indent $(IDT_OPT) $(SRC_LIB)/*.h
-#	indent $(IDT_OPT) $(SRC_TEST)/*.c
+	indent $(IDT_OPT) $(SRC_TEST)/*.c
 #	indent $(IDT_OPT) $(SRC_TEST)/*.h
 
 # Doc
