@@ -81,9 +81,6 @@ eccrvw_destroy(eccrvw_t * crv)
     free(crv);
 }
 
-
-
-
 /**
  * @brief set the value of p
  * @param the elliptic curve
