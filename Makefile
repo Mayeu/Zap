@@ -26,8 +26,8 @@ BUILD = $(PROJECT_DIR)/build
 # Object files
 OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
-OBJS_TEST = #$(addprefix $(BUILD)/, test_zpts.o)
-TEST_DEPS = #$(addprefix $(SRC_TEST), test_zpts.c)
+OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zpts.o)
+TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c)
 
 #Compiler
 CC = gcc
@@ -47,7 +47,7 @@ $(BUILD)/%.o: $(SRC_LIB)/%.c
 # Test
 test: $(OBJS_TEST) lib
 
-$(BUILD)/test.o: $(SRC_TEST)/test.c $(TEST_DEPS)
+$(BUILD)/%.o: $(SRC_TEST)/%.c $(TEST_DEPS)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 # Zap
@@ -63,7 +63,7 @@ $(BIN)/zap: $(OBJS_ZAP) $(OBJS_LIB)
 	$(LD) $(LDFLAGS) -o $@ $^
 
 # Link Test
-link: $(BIN)/testzap test lib
+linktest: $(BIN)/testzap test lib
 
 $(BIN)/testzap: $(OBJS_LIB) $(OBJS_TEST)
 	$(LD) $(LDFLAGS) -o $@ $^
@@ -78,7 +78,7 @@ indent:
 #	indent $(IDT_OPT) $(SRC_ZAP)/*.h
 	indent $(IDT_OPT) $(SRC_LIB)/*.c
 #	indent $(IDT_OPT) $(SRC_LIB)/*.h
-#	indent $(IDT_OPT) $(SRC_TEST)/*.c
+	indent $(IDT_OPT) $(SRC_TEST)/*.c
 #	indent $(IDT_OPT) $(SRC_TEST)/*.h
 
 # Doc
