@@ -61,9 +61,8 @@ test_eccrvw_create(void)
 }
 
 /*
- * Simple test of eccrvw_create(). Check that the curve is correctly
- * allocated and that the value are the expected ones. Must be run as the 
- * first test. 
+ * Simple test of eccrvw_destroy(). 
+ * Check that the curve is correctly destroyed.
  */
 void
 test_eccrvw_destroy(void)
@@ -71,6 +70,11 @@ test_eccrvw_destroy(void)
     eccrvw_destroy(crv);
     CU_ASSERT(NULL == crv);
 }
+
+/*
+ * Simple test of eccrvw_are_equals().
+ * Test the comparison of 2 curves.
+ */
 
 void
 test_eccrvw_are_equals(void)
