@@ -89,79 +89,6 @@ void            eccrvw_destroy(eccrvw_t * crv);
 
 
 /**
- * @brief return the value of p, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the p value
- */
-
-void            eccrvw_get_p(mpz_t p, eccrvw_t * crv);
-
-/**
- * @brief return the value of n, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the n value
- */
-
-void            eccrvw_get_n(mpz_t n, eccrvw_t * crv);
-
-/**
- * @brief return the value of a4, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the a4 value
- */
-
-void            eccrvw_get_a4(mpz_t a4, eccrvw_t * crv);
-
-/**
- * @brief return the value of a6, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the a6 value
- */
-
-void            eccrvw_get_a6(mpz_t a6, eccrvw_t * crv);
-
-/**
- * @brief return the value of r4, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the r4 value
- */
-
-void            eccrvw_get_r4(mpz_t r4, eccrvw_t * crv);
-
-/**
- * @brief return the value of r6, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the r6 value
- */
-
-void            eccrvw_get_r6(mpz_t r6, eccrvw_t * crv);
-
-/**
- * @brief return the value of gx, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the gx value
- */
-
-void            eccrvw_get_gx(mpz_t gx, eccrvw_t * crv);
-
-/**
- * @brief return the value of gy, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the gy value
- */
-
-void            eccrvw_get_gy(mpz_t gy, eccrvw_t * crv);
-
-/**
- * @brief return the value of r, the returned value is safe to modify
- * @param the elliptic curve 
- * @return a pointer to the r value
- */
-
-void            eccrvw_get_r(mpz_t r, eccrvw_t * crv);
-
-
-/**
  * @brief set the value of p
  * @param the elliptic curve
  * @param the value of p
@@ -270,6 +197,6 @@ void            eccrvw_set_all(eccrvw_t * crv, mpz_t p, mpz_t n,
  *         false otherwise
  */
 
-bool eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2);
+bool            eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2);
 
 #endif                          /* __ZCRVW_H */
