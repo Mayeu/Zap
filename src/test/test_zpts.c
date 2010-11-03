@@ -10,8 +10,8 @@
  * Global point for the tests
  */
 static ecpts_t *pts1,
-               *pts2,
-               /**pts3*/;
+               *pts2;
+               // *pts3 ;
 static mpz_t    p,
                 n,
                 a4,
@@ -37,10 +37,14 @@ void            test_ecpts_destroy();
  * Function
  */
 
-void
-test_zpts(CU_pSuite pSuite)
-{
 
+/*
+ * The suite initialization function.  * Opens the temporary file used by
+ * the tests.  * Returns zero on success, non-zero otherwise.  
+ */
+int
+init_suite1(void)
+{
     /*
      * Init the global variable
      */
@@ -74,6 +78,46 @@ test_zpts(CU_pSuite pSuite)
                      10);
 
     crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
+
+
+    return 0;
+}
+
+/*
+ * The suite cleanup function. Closes the temporary file used by the
+ * tests. Returns zero on success, non-zero otherwise. 
+ */
+int
+clean_suite1(void)
+{
+    /*
+     * Destroy everything
+     */
+
+    ecpts_destroy(pts1);
+    ecpts_destroy(pts2);
+    mpz_clears(p, n, a4, a6, r4, r6, gx, gy, r);
+    eccrvw_destroy(crv);
+
+    return 0;
+}
+
+void
+test_zpts()
+{
+    CU_pSuite       pSuite = NULL;
+
+    /*
+     * add a suite to the registry 
+     */
+    pSuite =
+        CU_add_suite("Test suite for zpts module", init_suite1,
+                     clean_suite1);
+    if (NULL == pSuite) {
+        CU_cleanup_registry();
+        // return CU_get_error();
+    }
+
 
     if ((!CU_add_test(pSuite, "test of ecpts_create()", test_ecpts_create))
         || (!CU_add_test(pSuite, "test of ecpts_are_equals()",

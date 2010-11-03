@@ -1,1 +1,1 @@
-void test_zpts(CU_pSuite pSuite) ;
+void test_zpts() ;
