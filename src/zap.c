@@ -14,3 +14,10 @@
  * @author <mayeu.tik@gmail.com> <pierrealain.toret@gmail.com>
  * @date 2010/10/19
  */
+
+int
+main(int argc, const char *argv[])
+{
+
+    return 0;
+}
