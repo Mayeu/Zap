@@ -33,7 +33,7 @@ TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c)
 CC = gcc
 # GCC flags
 CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
-LDFLAGS = -lgmp
+LDFLAGS = -lgmp -lcunit
 
 # By default indent, build the project, the project and the doc
 all: indent link linktest doc
@@ -60,13 +60,13 @@ $(BUILD)/%.o: $(SRC_ZAP)/%.c
 link: $(BIN)/zap zap lib
 
 $(BIN)/zap: $(OBJS_ZAP) $(OBJS_LIB)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 # Link Test
 linktest: $(BIN)/testzap test lib
 
 $(BIN)/testzap: $(OBJS_LIB) $(OBJS_TEST)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 
 # Indent everything
