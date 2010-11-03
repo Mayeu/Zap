@@ -34,6 +34,23 @@
  */
 
 /**
+ * @brief Allocate a empty point
+ * @return a pointer to an ecpts_t or NULL if there was an error
+ */
+
+ecpts_t        *
+ecpts_init()
+{
+    ecpts_t        *pts;
+
+    pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
+    mpz_init(pts->x);           /* initialize the x coordinate */
+    mpz_init(pts->y);           /* initialize the y coordinate */
+
+    return pts;
+}
+
+/**
  * @brief Allocate and initialize a point
  * @param the x value
  * @param the y value
@@ -43,13 +60,11 @@
  */
 
 ecpts_t        *
-ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
+ecpts_init_set(mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
 {
     ecpts_t        *pts;
 
-    pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
-    mpz_init(pts->x);           /* initialize the x coordinate */
-    mpz_init(pts->y);           /* initialize the y coordinate */
+    pts = ecpts_init();
 
     if (ecpts_set_all(pts, x, y, C, inf) != EXIT_SUCCESS)
         return NULL;            /* if the set fail, for exemple, in case C 

@@ -74,7 +74,7 @@ zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
      * We create the point tmp. We arbitrary initiate it with the Q value (to
      * avoid losing time with other initialisation
      */
-    tmp = ecpts_create(Q->x, Q->y, Q->C, Q->inf);
+    tmp = ecpts_init_set(Q->x, Q->y, Q->C, Q->inf);
 
     /*
      * Q is the additive inverse of P

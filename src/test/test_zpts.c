@@ -27,7 +27,7 @@ static eccrvw_t *crv;
 /*
  * Private functions
  */
-void            test_ecpts_create();
+void            test_ecpts_init_set();
 void            test_ecpts_cpy();
 void            test_ecpts_is_inf();
 void            test_ecpts_are_equals();
@@ -119,9 +119,11 @@ test_zpts()
     }
 
 
-    if ((!CU_add_test(pSuite, "test of ecpts_create()", test_ecpts_create))
-        || (!CU_add_test(pSuite, "test of ecpts_are_equals()",
-                         test_ecpts_are_equals))
+    if ((!CU_add_test
+         (pSuite, "test of ecpts_init_set()", test_ecpts_init_set))
+        ||
+        (!CU_add_test
+         (pSuite, "test of ecpts_are_equals()", test_ecpts_are_equals))
         || (!CU_add_test(pSuite, "test of ecpts_cpy()", test_ecpts_cpy))
         || (!CU_add_test(pSuite, "test of ecpts_is_inf()",
                          test_ecpts_is_inf))
@@ -138,7 +140,7 @@ test_zpts()
  */
 
 void
-test_ecpts_create(void)
+test_ecpts_init_set(void)
 {
     mpz_t           x,
                     y;
@@ -146,7 +148,7 @@ test_ecpts_create(void)
     mpz_init_set_str(x, "789", 10);
     mpz_init_set_str(y, "456", 10);
 
-    pts1 = ecpts_create(x, y, crv, false);
+    pts1 = ecpts_init_set(x, y, crv, false);
     CU_ASSERT(NULL != pts1);
     CU_ASSERT(0 == mpz_cmp(x, pts1->x));
     CU_ASSERT(0 == mpz_cmp(y, pts1->y));

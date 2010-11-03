@@ -48,13 +48,20 @@ typedef struct _ECPTS {
     mpz_t           x;          /* !< x coordinate */
     mpz_t           y;          /* !< y coordinate */
     eccrvw_t       *C;          /* !< the curve associated to this point */
-    bool            inf;        /* !< boolean to know if this point is the 
-                                 * infinite point */
+    bool            inf;        /* !< bool to know if this is the inf
+                                 * point */
 } ecpts_t;
 
 /*
  * Functions
  */
+
+/**
+ * @brief Allocate a empty point
+ * @return a pointer to an ecpts_t or NULL if there was an error
+ */
+
+ecpts_t        *ecpts_init();
 
 /**
  * @brief Allocate and initialize a point
@@ -65,7 +72,7 @@ typedef struct _ECPTS {
  * @return a pointer to an ecpts_t or NULL if there was an error
  */
 
-ecpts_t        *ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C, bool inf);
+ecpts_t        *ecpts_init_set(mpz_t x, mpz_t y, eccrvw_t * C, bool inf);
 
 /**
  * @brief Copy a point in an other
