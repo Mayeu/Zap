@@ -41,16 +41,16 @@
  * @param the maximal size of the generated number
  */
 
-void dh_rand_gen(mpz_t p, int size);
+void            dh_rand_gen(mpz_t p, int size);
 
 /*
  * @brief run the Diffie-Hellman protocol and return the key
  * @param the curve we use
  * @param the point we give to compute the key
- * @return the key
+ * @return the key or the infinity point as an error value
  */
 
-ecpts * dh(eccrvw_t * crv, ecpts_t * P);
+ecpts          *dh(eccrvw_t * crv, ecpts_t * P);
 
 
 #endif                          /* __DH_H */

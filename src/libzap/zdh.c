@@ -63,28 +63,42 @@ dh_rand_gen(mpz_t p, int size)
  * @brief run the Diffie-Hellman protocol and return the key
  * @param the curve we use
  * @param the point we give to compute the key
- * @return the key
+ * @return the key or the infinity point as an error value
  */
 
-ecpts * dh(eccrvw_t * crv, ecpts_t * P) {
+ecpts          *
+dh(eccrvw_t * crv, ecpts_t * P)
+{
+
+    mpz_t           a,
+                    b;
+	bool ret = false;
+    (ecpts_t *) A, B, kA, kB;
+
+    mpz_init(a);
+    mpz_init(b);
+    // rand_a and rand_b are initialized so we can compute 2 random
+    // numbers.
+
+    dh_rand_gen(a, crv->);      // determine if the order of the group is
+    // p or n
+    dh_rand_gen(b, crv->);
+
+    // Alice and Bob compute their own part of the key
+    zmult(A, P, a);
+    zmult(B, P, b);
+
+    // Alice and Bob will compute the same key after all
+    zmult(kA, B, a);
+    zmult(kB, A, b);
+
+	if (ecpts_are_equals(kA, kB)==true) 
+		ret = true;
 	
-	mpz_t a, b;
-	(ecpts_t *) A, B, kA, kB;
-	
-	mpz_init(a);
-	mpz_init(b);
-	//rand_a and rand_b are initialized so we can compute 2 random numbers.
-	
-	dh_rand_gen(a, crv->); //determine if the order of the group is p or n
-	dh_rand_gen(b, crv->);
-	
-	//Alice and Bob compute their own part of the key
-	zmult(A, P, a);
-	zmult(B, P, b);
-	
-	//Alice and Bob will compute the same key after all
-	zmult(kA, B, a);
-	zmult(kB, A, b);
-	
-	return kA;
+	if (ret==true)
+    	return kA;
+	else {
+		ecpts_set_inf(kA, true);
+		return kA;
+	}
 }
