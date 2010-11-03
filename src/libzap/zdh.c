@@ -72,7 +72,7 @@ dh(eccrvw_t * crv, ecpts_t * P)
 
     mpz_t           a,
                     b;
-	bool ret = false;
+    bool            ret = false;
     (ecpts_t *) A, B, kA, kB;
 
     mpz_init(a);
@@ -92,13 +92,13 @@ dh(eccrvw_t * crv, ecpts_t * P)
     zmult(kA, B, a);
     zmult(kB, A, b);
 
-	if (ecpts_are_equals(kA, kB)==true) 
-		ret = true;
-	
-	if (ret==true)
-    	return kA;
-	else {
-		ecpts_set_inf(kA, true);
-		return kA;
-	}
+    if (ecpts_are_equals(kA, kB) == true)
+        ret = true;
+
+    if (ret == true)
+        return kA;
+    else {
+        ecpts_set_inf(kA, true);
+        return kA;
+    }
 }
