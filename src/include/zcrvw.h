@@ -270,6 +270,6 @@ void            eccrvw_set_all(eccrvw_t * crv, mpz_t p, mpz_t n,
  *         false otherwise
  */
 
-bool eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2);
+bool            eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2);
 
 #endif                          /* __ZCRVW_H */
