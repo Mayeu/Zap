@@ -15,8 +15,8 @@
  * @date 2010/10/14
  */
 
-#ifndef __DH_H
-#define __DH_H
+#ifndef __ZDH_H
+#define __ZDH_H
 
 /*
  * Include
@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <bool.h>
+#include "zpts.h"
+#include "zops.h"
 
 /*
  * Define
@@ -50,7 +52,7 @@ void            dh_rand_gen(mpz_t p, int size);
  * @return the key or the infinity point as an error value
  */
 
-ecpts          *dh(eccrvw_t * crv, ecpts_t * P);
+ecpts_t        *dh(eccrvw_t * crv, ecpts_t * P);
 
 
-#endif                          /* __DH_H */
+#endif                          /* __ZDH_H */

@@ -24,7 +24,7 @@ BIN = $(PROJECT_DIR)/bin
 BUILD = $(PROJECT_DIR)/build
 
 # Object files
-OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
+OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
 OBJS_TEST = $(addprefix $(BUILD)/, test_zpts.o test_zcrvw.o)
 TEST_DEPS = $(addprefix $(SRC_TEST), test_zpts.c test_zcrvw.c)
@@ -47,7 +47,7 @@ $(BUILD)/%.o: $(SRC_LIB)/%.c
 # Test
 test: $(OBJS_TEST) lib
 
-$(BUILD)/test.o: $(SRC_TEST)/test.c $(TEST_DEPS)
+$(BUILD)/%.o: $(SRC_TEST)/%.c $(TEST_DEPS)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 # Zap

@@ -24,6 +24,7 @@
 #include <gmp.h>
 #include <bool.h>
 #include "zdh.h"
+#include <time.h>
 
 /*
  * Define
@@ -43,15 +44,11 @@ void
 dh_rand_gen(mpz_t p, int size)
 {
     gmp_randstate_t state;      /* random init stat */
-    unsigned long   i;
 
-    i = 0;
     gmp_randinit_default(state);
     gmp_randseed_ui(state, time(NULL));
 
-    do {
-        mpz_urandomb(p, state, size);
-    } while (!isprime(p));
+    mpz_urandomb(p, state, size);
 
     /*
      * Free Ressources
@@ -66,27 +63,33 @@ dh_rand_gen(mpz_t p, int size)
  * @return the key or the infinity point as an error value
  */
 
-ecpts          *
+ecpts_t        *
 dh(eccrvw_t * crv, ecpts_t * P)
 {
 
-    mpz_t           a,
-                    b;
+    mpz_t           a;
+    mpz_t          *pa = &a;
+    mpz_t           b;
+    mpz_t          *pb = &b;
     bool            ret = false;
-    (ecpts_t *) A, B, kA, kB;
+    ecpts_t        *A;
+    ecpts_t        *B;
+    ecpts_t        *kA;
+    ecpts_t        *kB;
 
     mpz_init(a);
     mpz_init(b);
     // rand_a and rand_b are initialized so we can compute 2 random
     // numbers.
 
-    dh_rand_gen(a, crv->);      // determine if the order of the group is
+    dh_rand_gen(pa, mpz_get_ui(crv->p));        // determine if the order
+                                                // of the group is
     // p or n
-    dh_rand_gen(b, crv->);
+    dh_rand_gen(pb, crv->p);
 
     // Alice and Bob compute their own part of the key
-    zmult(A, P, a);
-    zmult(B, P, b);
+    zmult(A, P, pa);
+    zmult(B, P, pb);
 
     // Alice and Bob will compute the same key after all
     zmult(kA, B, a);
