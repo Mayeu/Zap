@@ -85,10 +85,10 @@ void            ecpts_cpy(ecpts_t * D, ecpts_t * S);
 /**
  * @brief Deallocate a point
  * @param the point
- * @return void
+ * @return null
  */
 
-void            ecpts_destroy(ecpts_t * pts);
+ecpts_t        *ecpts_destroy(ecpts_t * pts);
 
 /**
  * @brief set the value of x
