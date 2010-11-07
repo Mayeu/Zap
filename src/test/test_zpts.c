@@ -1,3 +1,24 @@
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <mayeu.tik@gmail.com> and <pierrealain.toret@gmail.com> wrote this file. As
+ * long as you retain this notice you can do whatever you want with this stuff.
+ * If we meet some day, and you think this stuff is worth it, you can buy us a
+ * beer in return. Matthieu Maury & Pierre-Alain Toret
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * @file test_zpts.c
+ * @brief Test the zpts module
+ * @author <mayeu.tik@gmail.com> <pierrealain.toret@gmail.com>
+ * @date 2010/10/13
+ */
+
+/*
+ * Include
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,15 +33,6 @@
 static ecpts_t *pts1,
                *pts2;
                // *pts3 ;
-static mpz_t    p,
-                n,
-                a4,
-                a6,
-                r4,
-                r6,
-                gx,
-                gy,
-                r;
 
 static eccrvw_t *crv;
 
@@ -37,7 +49,6 @@ void            test_ecpts_destroy();
  * Function
  */
 
-
 /*
  * The suite initialization function.  * Opens the temporary file used by
  * the tests.  * Returns zero on success, non-zero otherwise.  
@@ -45,9 +56,15 @@ void            test_ecpts_destroy();
 int
 init_suite1(void)
 {
-    /*
-     * Init the global variable
-     */
+    mpz_t           p,
+                    n,
+                    a4,
+                    a6,
+                    r4,
+                    r6,
+                    gx,
+                    gy,
+                    r;
 
     mpz_init_set_str(p,
                      "8884933102832021670310856601112383279507496491807071433260928721853918699951",
@@ -79,6 +96,7 @@ init_suite1(void)
 
     crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
 
+    // mpz_clears(p, n, a4, a6, r4, r6, gx, gy, r);
 
     return 0;
 }
@@ -94,10 +112,9 @@ clean_suite1(void)
      * Destroy everything
      */
 
-    ecpts_destroy(pts1);
-    ecpts_destroy(pts2);
-    mpz_clears(p, n, a4, a6, r4, r6, gx, gy, r);
-    eccrvw_destroy(crv);
+    pts1 = ecpts_destroy(pts1);
+    pts2 = ecpts_destroy(pts2);
+    // eccrvw_destroy(crv);
 
     return 0;
 }
@@ -165,6 +182,7 @@ test_ecpts_are_equals()
 void
 test_ecpts_cpy()
 {
+    pts2 = ecpts_init();
     ecpts_cpy(pts2, pts1);
 
     CU_ASSERT(true == ecpts_are_equals(pts1, pts2));
@@ -181,4 +199,9 @@ test_ecpts_is_inf()
 void
 test_ecpts_destroy()
 {
+    pts1 = ecpts_destroy(pts1);
+    // pts2 = ecpts_destroy(pts2);
+
+    CU_ASSERT(NULL == pts1);
+    // CU_ASSERT(NULL == pts2);
 }
