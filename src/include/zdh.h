@@ -43,16 +43,30 @@
  * @param the maximal size of the generated number
  */
 
-void            dh_rand_gen(mpz_t p, int size);
+void            dh_rand_gen(mpz_t p, mpz_t size);
 
 /*
- * @brief run the Diffie-Hellman protocol and return the key
- * @param the curve we use
- * @param the point we give to compute the key
- * @return the key or the infinity point as an error value
+ * @brief compute one's internal part of the key
+ * @param an allocated pointer, and a initialized mpz
+ * @param a pointer to the chosen point of the curve
  */
 
-ecpts_t        *dh(eccrvw_t * crv, ecpts_t * P);
+ecpts_t        *dh_first_step(mpz_t s, ecpts_t * P);
 
+/*
+ * @brief compute one's external part of the key
+ * @param an allocated pointer, and a initialized mpz
+ * @param a pointer to the internal part of the key
+ */
+
+ecpts_t        *dh_second_step(mpz_t s, ecpts_t * P);
+
+/*
+ * @brief check if the 2 keys are the same
+ * @param a pointer to the first key
+ * @param a pointer to the second key
+ */
+
+bool            dh_check_keys(ecpts_t * KA, ecpts_t * KB);
 
 #endif                          /* __ZDH_H */

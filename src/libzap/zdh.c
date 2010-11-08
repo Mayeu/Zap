@@ -41,67 +41,71 @@
  */
 
 void
-dh_rand_gen(mpz_t p, int size)
+dh_rand_gen(mpz_t p, mpz_t size)
 {
     gmp_randstate_t state;      /* random init stat */
 
     gmp_randinit_default(state);
     gmp_randseed_ui(state, time(NULL));
 
-    mpz_urandomb(p, state, size);
+    mpz_urandomm(p, state, size);
 
     /*
      * Free Ressources
      */
     gmp_randclear(state);
 }
+/*
+ * @brief generate a random number
+ * @param an allocated pointer, and a initialized mpz
+ * @param the maximal size of the generated number
+ */
+
+void            dh_rand_gen(mpz_t p, mpz_t size);
 
 /*
- * @brief run the Diffie-Hellman protocol and return the key
- * @param the curve we use
- * @param the point we give to compute the key
- * @return the key or the infinity point as an error value
+ * @brief compute one's internal part of the key
+ * @param an allocated pointer, and a initialized mpz
+ * @param a pointer to the chosen point of the curve
  */
 
 ecpts_t        *
-dh(eccrvw_t * crv, ecpts_t * P)
+dh_first_step(mpz_t s, ecpts_t *P)
 {
+    ecpts_t        *S;
+    // Computation of the radom number
+    dh_rand_gen(s, P->C->p);
+    // Computation of one's part of the key
+    zmult(S, P, s);
+    return S;
+}
 
-    mpz_t           a;
-    mpz_t          *pa = &a;
-    mpz_t           b;
-    mpz_t          *pb = &b;
-    bool            ret = false;
-    ecpts_t        *A;
-    ecpts_t        *B;
-    ecpts_t        *kA;
-    ecpts_t        *kB;
+/*
+ * @brief compute one's external part of the key
+ * @param an allocated pointer, and a initialized mpz
+ * @param a pointer to the internal part of the key
+ */
 
-    mpz_init(a);
-    mpz_init(b);
-    // rand_a and rand_b are initialized so we can compute 2 random
-    // numbers.
+ecpts_t        *
+dh_second_step(mpz_t s, ecpts_t *P)
+{
+    ecpts_t        *K;
+    // Computation of the foreign part of the key
+    zmult(K, P, s);
+    return K;
+}
 
-    dh_rand_gen(pa, mpz_get_ui(crv->p));        // determine if the order
-                                                // of the group is
-    // p or n
-    dh_rand_gen(pb, crv->p);
+/*
+ * @brief check if the 2 keys are the same
+ * @param a pointer to the first key
+ * @param a pointer to the second key
+ */
 
-    // Alice and Bob compute their own part of the key
-    zmult(A, P, pa);
-    zmult(B, P, pb);
-
-    // Alice and Bob will compute the same key after all
-    zmult(kA, B, a);
-    zmult(kB, A, b);
-
-    if (ecpts_are_equals(kA, kB) == true)
-        ret = true;
-
-    if (ret == true)
-        return kA;
-    else {
-        ecpts_set_inf(kA, true);
-        return kA;
-    }
+bool
+dh_check_keys(ecpts_t* KA, ecpts_t* KB)
+{
+    if (ecpts_are_equals(KA, KB) == true)
+        return true;
+    else
+        return false;
 }
