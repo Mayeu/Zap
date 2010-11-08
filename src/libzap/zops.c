@@ -142,7 +142,9 @@ zinvert(ecpts_t * R, ecpts_t * P)
 void
 zdouble(ecpts_t * R, ecpts_t * P)
 {
-    mpz_t           lmbd;
+    mpz_t           lmbd,
+                    lmbd2,
+                    tmp;
     eccrvw_t       *C;
 
     C = P->C;
@@ -150,24 +152,49 @@ zdouble(ecpts_t * R, ecpts_t * P)
     /*
      * Lambda
      */
-    mpz_divexact(lmbd, P->y, P->x);     /* lmbd = yp/xp */
-    mpz_add(lmbd, lmbd, P->x);  /* lmbd = xp + yp/xy */
+    mpz_inits(lmbd, lmbd2, tmp);
+    mpz_mul(lmbd, P->x, P->x);  /* lmbd = xp^2 */
+    mpz_mul_ui(lmbd, lmbd, 3);  /* lmbd = 3xp^2 */
+    // mpz_mul(tmp, P->x, C->a2); /* tmp = a2*xp */
+    // mpz_mul_ui(tmp, tmp, 2); /* tmp = 2a2*xp */
+    // mpz_add(lmbd, lmbd, tmp); /* lmbd = 3xp^2 + 2a2*xp */
+    mpz_add(lmbd, lmbd, C->a4); /* lmbd = 3xp^2 + 2a2*xp + a4 */
+    // mpz_mul(tmp, C->a1, P->y); /* tmp = a1*py */
+    // mpz_sub(lmbd, lmbd, tmp); /* lmbd = 3xp^2 + 2a2*xp + a4 - a1*py */
+    mpz_add(lmbd2, P->y, P->y); /* lmbd2 = 2yp */
+    // mpz_mul(tmp, C->a1, P->x); /* tmp = a1*xp */
+    // mpz_add(lmbd2, lmbd2, tmp); /* lmbd2 = yp^2 + a1*xp */
+    // mpz_add(lmbd2, lmbd2, C->a3); /* lmbd2 = yp^2 + a1*yp + a3 */
+    mpz_invert(lmbd2, lmbd2, C->p);     /* lmbd2 = lmbd2^-1 */
+    mpz_mul(lmbd, lmbd, lmbd2); /* lmbd = (3xp^2 + 2a2*xp + a4 - a1*py) /
+                                 * (yp^2 + a1*yp + a3) */
+    mpz_mod(lmbd, lmbd, C->p);
 
     /*
      * xr
      */
     mpz_mul(R->x, lmbd, lmbd);  /* xr = lmbd^2 */
-    mpz_add(R->x, R->x, lmbd);  /* xr = lmbd^2 + lmbd */
-    mpz_mod(R->x, R->x, C->p);
+    // mpz_mul(tmp, lmbd, C->a1); /* tmp = a1*lmbd */
+    // mpz_add(R->x, R->x, tmp); /* xr = lmbd^2 + a1*lmbd */
+    // mpz_sub(R->x, R->x, a2); /* xr = lmbd^2 + a1*lmbd - a2 */
+    mpz_sub(R->x, R->x, P->x);  /* xr = lmbd^2 + a1*lmbd - a2 - xp */
+    mpz_mod(R->x, R->x, C->p);  /* stay in the additive ring ! */
 
     /*
      * yr
      */
-    mpz_mul(R->y, P->x, P->x);  /* yr = xp^2 */
-    mpz_mul(lmbd, lmbd, R->x);  /* lmbd = lmbd * xr */
-    mpz_add(R->y, R->y, lmbd);  /* yr = xp^2 + lmbd * xr */
-    mpz_add(R->y, R->y, R->x);  /* yr = xp^2 + lmbd * xr + xr */
-    mpz_mod(R->x, R->x, C->p);
+    // mpz_add(R->y, lmbd, C->a1); /* yr = lmbd + a1 */
+    mpz_mul_si(R->y, lmbd, -1); /* yr = -(lmbd + a1) */
+    mpz_mul(R->y, R->y, R->x);  /* yr = -(lmbd + a1)xr */
+    mpz_mul(tmp, lmbd, P->x);   /* tmp = lmbd*xp */
+    mpz_add(R->y, R->y, tmp);   /* yr = -(lmbd + a1)xr + lmbd*xp */
+    mpz_sub(R->y, R->y, P->y);  /* yr = -(lmbd + a1)xr + lmbd*xp - yp */
+    // mpz_sub(R->y, R->y, C->a3); /* yr = -(lmbd + a1)xr + lmbd*xp - yp - 
+    // 
+    // a3 */
+    mpz_mod(R->y, R->y, C->p);  /* stay in the additive ring ! */
+
+    mpz_clears(lmbd, lmbd2, tmp);
 
     return;
 }
