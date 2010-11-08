@@ -51,18 +51,11 @@ eccrvw_t
 {
     eccrvw_t       *crv;
 
-    crv = (eccrvw_t *) malloc(sizeof(eccrvw_t));
-    mpz_inits(crv->p, crv->n, crv->a4, crv->a6, crv->r4, crv->r6, crv->gx,
-              crv->gy - crv->r);
-    eccrvw_set_all(crv, p, n, a4, a6, r4, r6, gx, gy, r);
-    /*
-     * mpz_init_set(crv->p, p); mpz_init_set(crv->n, n);
-     * mpz_init_set(crv->a4, a4); mpz_init_set(crv->a6, a6);
-     * mpz_init_set(crv->r4, r4); mpz_init_set(crv->r6, r6);
-     * mpz_init_set(crv->gx, gy); mpz_init_set(crv->gy, gy);
-     * mpz_init_set(crv->r, r); 
-     */
-    return crv;
+    crv = (eccrvw_t *) malloc(sizeof(eccrvw_t));        /* allocate the
+                                                         * curve */
+    eccrvw_set_all(crv, p, n, a4, a6, r4, r6, gx, gy, r);       /* set the 
+                                                                 * coordinates */
+    return crv;                 /* return the pointer to the curve */
 }
 
 
@@ -72,13 +65,21 @@ eccrvw_t
  * @return void
  */
 
-void
+eccrvw_t       *
 eccrvw_destroy(eccrvw_t * crv)
 {
-    mpz_clears(crv->p, crv->n, crv->a4, crv->a6, crv->r4, crv->r6, crv->gx,
-               crv->gy, crv->r);
+    if (crv != NULL)
+    {
+        mpz_clears(crv->p, crv->n, crv->a4, crv->a6, crv->r4, crv->r6, crv->gx, crv->gy, crv->r);       /* clean 
+                                                                                                         * the 
+                                                                                                         * parameters 
+                                                                                                         * of 
+                                                                                                         * the 
+                                                                                                         * curve */
 
-    free(crv);
+        free(crv);
+    }
+    return NULL;                /* free the memory */
 }
 
 /**
@@ -243,7 +244,7 @@ eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2)
 {
     if (mpz_cmp(crv1->p, crv2->p) == 0)
         if (mpz_cmp(crv1->n, crv2->n) == 0)
-            if (mpz_cmp(crv1->a4, crv2->a6) == 0)
+            if (mpz_cmp(crv1->a4, crv2->a4) == 0)
                 if (mpz_cmp(crv1->a6, crv2->a6) == 0)
                     if (mpz_cmp(crv1->r4, crv2->r4) == 0)
                         if (mpz_cmp(crv1->r6, crv2->r6) == 0)

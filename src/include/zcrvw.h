@@ -85,7 +85,7 @@ eccrvw_t       *eccrvw_create(mpz_t p, mpz_t n, mpz_t a4, mpz_t a6,
  * @return void
  */
 
-void            eccrvw_destroy(eccrvw_t * crv);
+eccrvw_t       *eccrvw_destroy(eccrvw_t * crv);
 
 
 /**
