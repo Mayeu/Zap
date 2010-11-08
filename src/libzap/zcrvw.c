@@ -68,14 +68,29 @@ eccrvw_t
 eccrvw_t       *
 eccrvw_destroy(eccrvw_t * crv)
 {
-    if (crv != NULL)
-    {
-        mpz_clears(crv->p, crv->n, crv->a4, crv->a6, crv->r4, crv->r6, crv->gx, crv->gy, crv->r);       /* clean 
-                                                                                                         * the 
-                                                                                                         * parameters 
-                                                                                                         * of 
-                                                                                                         * the 
-                                                                                                         * curve */
+    if (crv != NULL) {
+        if (crv->p != NULL)
+            mpz_clear(crv->p);
+        if (crv->n != NULL)
+            mpz_clear(crv->n);
+        if (crv->a4 != NULL)
+            mpz_clear(crv->a4);
+        if (crv->a6 != NULL)
+            mpz_clear(crv->a6);
+        if (crv->r4 != NULL)
+            mpz_clear(crv->r4);
+        if (crv->r6 != NULL)
+            mpz_clear(crv->r6);
+        if (crv->gx != NULL)
+            mpz_clear(crv->gx);
+        if (crv->gy != NULL)
+            mpz_clear(crv->gy);
+        if (crv->r != NULL)
+            mpz_clear(crv->r);
+
+        /*
+         * clean * the * parameters * of * the * curve 
+         */
 
         free(crv);
     }
