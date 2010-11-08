@@ -1,7 +1,33 @@
+/*
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <mayeu.tik@gmail.com> and <pierrealain.toret@gmail.com> wrote this file. As
+ * long as you retain this notice you can do whatever you want with this stuff.
+ * If we meet some day, and you think this stuff is worth it, you can buy us a
+ * beer in return. Matthieu Maury & Pierre-Alain Toret
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * @file test.c
+ * @brief Main file for launching the test
+ * @author <mayeu.tik@gmail.com> <pierrealain.toret@gmail.com>
+ * @date 2010/10/13
+ */
+
+/*
+ * Include
+ */
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "test_zcrvw.c"
-#include "CUnit/Basic.h"
+#include <CUnit/Basic.h>
+#include "test.h"
+
+/*
+ * Define
+ */
 
 /*
  * The main() function for setting up and running the tests. Returns a
@@ -10,7 +36,6 @@
 int
 main()
 {
-    CU_pSuite       pSuite = NULL;
 
     /*
      * initialize the CUnit test registry 
@@ -19,32 +44,9 @@ main()
         return CU_get_error();
 
     /*
-     * add a suite to the registry 
+     * Add test for the point 
      */
-    pSuite = CU_add_suite("Suite_1", void, void);
-    if (NULL == pSuite) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
-
-    /*
-     * add the tests to the suite 
-     */
-    /*
-     * NOTE - ORDER IS IMPORTANT - MUST TEST fread() AFTER fprintf() 
-     */
-    if ((NULL ==
-         CU_add_test(pSuite, "test of eccrvw_create", test_eccrvw_create))
-        || (NULL ==
-            CU_add_test(pSuite, "test of eccrvw_create",
-                        test_eccrvw_destroy))
-        || (NULL ==
-            CU_add_test(pSuite, "test of eccrvw_create",
-                        test_eccrvw_are_equals))
-        ) {
-        CU_cleanup_registry();
-        return CU_get_error();
-    }
+    test_zcrvw();
 
     /*
      * Run all tests using the CUnit Basic interface 
