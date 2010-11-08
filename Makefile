@@ -24,16 +24,16 @@ BIN = $(PROJECT_DIR)/bin
 BUILD = $(PROJECT_DIR)/build
 
 # Object files
-OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o)
+OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
-OBJS_TEST = $(addprefix $(BUILD)/, test_zpts.o test_zcrvw.o)
-TEST_DEPS = $(addprefix $(SRC_TEST), test_zpts.c test_zcrvw.c)
+OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zcrvw.o)
+TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zcrvw.c)
 
 #Compiler
 CC = gcc
 # GCC flags
 CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
-LDFLAGS = -lgmp
+LDFLAGS = -ggdb -lgmp -lcunit
 
 # By default indent, build the project, the project and the doc
 all: indent link linktest doc
@@ -60,13 +60,13 @@ $(BUILD)/%.o: $(SRC_ZAP)/%.c
 link: $(BIN)/zap zap lib
 
 $(BIN)/zap: $(OBJS_ZAP) $(OBJS_LIB)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 # Link Test
-link: $(BIN)/testzap test lib
+linktest: $(BIN)/testzap test lib
 
 $(BIN)/testzap: $(OBJS_LIB) $(OBJS_TEST)
-	$(LD) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 
 # Indent everything
