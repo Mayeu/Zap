@@ -191,6 +191,15 @@ zdouble(ecpts_t * R, ecpts_t * P)
     mpz_sub(R->y, R->y, P->y);  /* yr = -(lmbd + a1)xr + lmbd*xp - yp */
     // mpz_sub(R->y, R->y, C->a3); /* yr = -(lmbd + a1)xr + lmbd*xp - yp - 
     // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
     // a3 */
     mpz_mod(R->y, R->y, C->p);  /* stay in the additive ring ! */
 
