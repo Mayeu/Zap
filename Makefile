@@ -24,7 +24,7 @@ BIN = $(PROJECT_DIR)/bin
 BUILD = $(PROJECT_DIR)/build
 
 # Object files
-OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o)
+OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
 OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zcrvw.o)
 TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zcrvw.c)
@@ -33,10 +33,10 @@ TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zcrvw.c)
 CC = gcc
 # GCC flags
 CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
-LDFLAGS = -ggdb -lgmp -lcunit
+LDFLAGS = -ggdb -lgmp #-lcunit
 
 # By default indent, build the project, the project and the doc
-all: indent link linktest doc
+all: indent link doc
 
 # Lib
 lib: $(OBJS_LIB)
