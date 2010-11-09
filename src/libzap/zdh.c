@@ -55,13 +55,6 @@ dh_rand_gen(mpz_t p, mpz_t size)
      */
     gmp_randclear(state);
 }
-/*
- * @brief generate a random number
- * @param an allocated pointer, and a initialized mpz
- * @param the maximal size of the generated number
- */
-
-void            dh_rand_gen(mpz_t p, mpz_t size);
 
 /*
  * @brief compute one's internal part of the key
@@ -70,7 +63,7 @@ void            dh_rand_gen(mpz_t p, mpz_t size);
  */
 
 ecpts_t        *
-dh_first_step(mpz_t s, ecpts_t *P)
+dh_first_step(mpz_t s, ecpts_t * P)
 {
     ecpts_t        *S;
     // Computation of the radom number
@@ -87,7 +80,7 @@ dh_first_step(mpz_t s, ecpts_t *P)
  */
 
 ecpts_t        *
-dh_second_step(mpz_t s, ecpts_t *P)
+dh_second_step(mpz_t s, ecpts_t * P)
 {
     ecpts_t        *K;
     // Computation of the foreign part of the key
@@ -102,7 +95,7 @@ dh_second_step(mpz_t s, ecpts_t *P)
  */
 
 bool
-dh_check_keys(ecpts_t* KA, ecpts_t* KB)
+dh_check_keys(ecpts_t * KA, ecpts_t * KB)
 {
     if (ecpts_are_equals(KA, KB) == true)
         return true;
