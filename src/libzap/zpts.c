@@ -34,6 +34,23 @@
  */
 
 /**
+ * @brief Allocate a empty point
+ * @return a pointer to an ecpts_t or NULL if there was an error
+ */
+
+ecpts_t        *
+ecpts_init()
+{
+    ecpts_t        *pts;
+
+    pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
+    mpz_init(pts->x);           /* initialize the x coordinate */
+    mpz_init(pts->y);           /* initialize the y coordinate */
+
+    return pts;
+}
+
+/**
  * @brief Allocate and initialize a point
  * @param the x value
  * @param the y value
@@ -43,13 +60,11 @@
  */
 
 ecpts_t        *
-ecpts_create(mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
+ecpts_init_set(mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
 {
     ecpts_t        *pts;
 
-    pts = (ecpts_t *) malloc(sizeof(ecpts_t));  /* alloc the point */
-    mpz_init(pts->x);           /* initialize the x coordinate */
-    mpz_init(pts->y);           /* initialize the y coordinate */
+    pts = ecpts_init();
 
     if (ecpts_set_all(pts, x, y, C, inf) != EXIT_SUCCESS)
         return NULL;            /* if the set fail, for exemple, in case C 
@@ -71,23 +86,32 @@ ecpts_cpy(ecpts_t * D, ecpts_t * S)
     mpz_set(D->x, S->x);
     mpz_set(D->y, S->y);
     D->C = S->C;
+    D->inf = S->inf;
 }
 
 /**
  * @brief Deallocate a point
  * @param the point
- * @return void
+ * @return null
  */
 
-void
+ecpts_t        *
 ecpts_destroy(ecpts_t * pts)
 {
-    mpz_clears(pts->x, pts->y); /* clean the coordinate */
+    /*
+     * If pts is NULL, we return NULL directly
+     */
+    if (pts == NULL)
+        return NULL;
 
-    eccrvw_destroy(pts->C);
+    // mpz_clears(pts->x, pts->y); /* clean the coordinate */
+
+    // eccrvw_destroy(pts->C);
     pts->C = NULL;
 
     free(pts);                  /* free the memory */
+
+    return NULL;
 }
 
 /**
@@ -170,16 +194,13 @@ ecpts_set_all(ecpts_t * pts, mpz_t x, mpz_t y, eccrvw_t * C, bool inf)
 /**
  * @brief return if the point is the point at infinity
  * @param the points
- * @return the invert of inf value of the points
+ * @return inf value of the points
  */
 
 bool
 ecpts_is_inf(ecpts_t * pts)
 {
-    if (pts->inf)
-        return false;
-
-    return true;
+    return pts->inf;
 }
 
 /**
@@ -202,8 +223,9 @@ ecpts_are_equals(ecpts_t * P, ecpts_t * Q)
      */
     if (mpz_cmp(P->x, Q->x) == 0)
         if (mpz_cmp(P->y, Q->y) == 0)
-            // if (eccrvw_are_equals(P->C, Q->C))
-            return true;
+            if (P->inf == Q->inf)
+                if (eccrvw_are_equals(P->C, Q->C))
+                    return true;
 
     return false;
 }
