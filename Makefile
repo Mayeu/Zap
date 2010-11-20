@@ -26,8 +26,8 @@ BUILD = $(PROJECT_DIR)/build
 # Object files
 OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
-OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zpts.o test_zcrvw.o)
-TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c test_zcrvw.c)
+OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zpts.o test_zcrvw.o test_zops.o)
+TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c test_zcrvw.c test_zops.c)
 
 #Compiler
 CC = gcc
