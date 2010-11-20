@@ -74,18 +74,22 @@ zadd(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
      * We create the point tmp. We arbitrary initiate it with the Q value (to
      * avoid losing time with other initialisation
      */
-    tmp = ecpts_init_set(Q->x, Q->y, Q->C, Q->inf);
+    // tmp = ecpts_init_set(Q->x, Q->y, Q->C, Q->inf);
 
     /*
      * Q is the additive inverse of P
      * We return the point at infinity
      */
+    tmp = ecpts_init();
     zinvert(tmp, Q);
 
     if (ecpts_are_equals(P, tmp)) {
         ecpts_set_inf(R, true);
+        ecpts_destroy(tmp);
         return;
     }
+
+    ecpts_destroy(tmp);
 
     /*
      * P and Q are equals
@@ -152,7 +156,8 @@ zdouble(ecpts_t * R, ecpts_t * P)
     /*
      * Lambda
      */
-    mpz_inits(lmbd, lmbd2, tmp);
+    mpz_inits(lmbd, lmbd2, tmp, NULL);
+
     mpz_mul(lmbd, P->x, P->x);  /* lmbd = xp^2 */
     mpz_mul_ui(lmbd, lmbd, 3);  /* lmbd = 3xp^2 */
     // mpz_mul(tmp, P->x, C->a2); /* tmp = a2*xp */
@@ -191,7 +196,7 @@ zdouble(ecpts_t * R, ecpts_t * P)
     mpz_sub(R->y, R->y, P->y);  /* yr = -(lmbd + a1)xr + lmbd*xp - yp */
     mpz_mod(R->y, R->y, C->p);  /* stay in the additive ring ! */
 
-    mpz_clears(lmbd, lmbd2, tmp);
+    mpz_clears(lmbd, lmbd2, tmp, NULL);
 
     return;
 }
@@ -254,7 +259,7 @@ add_pts(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
 
     C = P->C;
 
-    mpz_inits(X, lmbd, tmp);
+    mpz_inits(X, lmbd, tmp, NULL);
 
     /*
      * X
@@ -287,6 +292,8 @@ add_pts(ecpts_t * R, ecpts_t * P, ecpts_t * Q)
     mpz_add(R->y, R->y, lmbd);  /* yr = (lmbd + 1) * xr + * lmbd*xp */
     mpz_add(R->y, R->y, P->y);  /* yr = (lmbd + 1) * xr + lmbd*xp + yp */
     mpz_mod(R->y, R->y, C->p);  /* Stay in your division ring ! */
+
+    mpz_clears(X, lmbd, tmp, NULL);
 
     return;
 }
