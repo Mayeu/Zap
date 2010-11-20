@@ -43,16 +43,14 @@ main()
     if (CUE_SUCCESS != CU_initialize_registry())
         return CU_get_error();
 
+   test_zcrvw();
+    test_zpts();
+    test_zops();
+
     /*
-     * Add test for the point 
+     * Run all tests using the CUnit Basic interface 
      */
-    <<<<<<<HEAD test_zcrvw();
-    == == == = test_zpts();
-    >>>>>>>670429 aeb38b8215019d11fc19d50d8d1db73446
-        /*
-         * Run all tests using the CUnit Basic interface 
-         */
-        CU_basic_set_mode(CU_BRM_VERBOSE);
+    CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
     CU_cleanup_registry();
     return CU_get_error();
