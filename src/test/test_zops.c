@@ -32,18 +32,17 @@
  */
 static ecpts_t *pts1,
                *pts2;
-               // *pts3 ;
+// *pts3;
 
 static eccrvw_t *crv;
 
 /*
  * Private functions
  */
-void            test_ecpts_init_set();
-void            test_ecpts_cpy();
-void            test_ecpts_is_inf();
-void            test_ecpts_are_equals();
-void            test_ecpts_destroy();
+void            test_zinvert();
+void            test_zdouble();
+void            test_zadd();
+void            test_zmult();
 
 /*
  * Function
@@ -54,7 +53,7 @@ void            test_ecpts_destroy();
  * the tests.  * Returns zero on success, non-zero otherwise.  
  */
 int
-init_suite1(void)
+zops_init_suite(void)
 {
     mpz_t           p,
                     n,
@@ -106,7 +105,7 @@ init_suite1(void)
  * tests. Returns zero on success, non-zero otherwise. 
  */
 int
-clean_suite1(void)
+zops_clean_suite(void)
 {
     /*
      * Destroy everything
@@ -120,7 +119,7 @@ clean_suite1(void)
 }
 
 void
-test_zpts()
+test_zops()
 {
     CU_pSuite       pSuite = NULL;
 
@@ -128,24 +127,18 @@ test_zpts()
      * add a suite to the registry 
      */
     pSuite =
-        CU_add_suite("Test suite for zpts module", init_suite1,
-                     clean_suite1);
+        CU_add_suite("Test suite for zops module", zops_init_suite,
+                     zops_clean_suite);
     if (NULL == pSuite) {
         CU_cleanup_registry();
         // return CU_get_error();
     }
 
 
-    if ((!CU_add_test
-         (pSuite, "test of ecpts_init_set()", test_ecpts_init_set))
-        ||
-        (!CU_add_test
-         (pSuite, "test of ecpts_are_equals()", test_ecpts_are_equals))
-        || (!CU_add_test(pSuite, "test of ecpts_cpy()", test_ecpts_cpy))
-        || (!CU_add_test(pSuite, "test of ecpts_is_inf()",
-                         test_ecpts_is_inf))
-        || (!CU_add_test(pSuite, "test of ecpts_destroy()",
-                         test_ecpts_destroy))) {
+    if ((!CU_add_test(pSuite, "test of zinvert()", test_zinvert))
+        || (!CU_add_test(pSuite, "test of zdouble()", test_zdouble))
+        || (!CU_add_test(pSuite, "test of zadd()", test_zadd))
+        || (!CU_add_test(pSuite, "test of zmult()", test_zmult))) {
         CU_cleanup_registry();
         // return CU_get_error();
     }
@@ -157,51 +150,25 @@ test_zpts()
  */
 
 void
-test_ecpts_init_set(void)
+test_zinvert()
 {
-    mpz_t           x,
-                    y;
-
-    mpz_init_set_str(x, "789", 10);
-    mpz_init_set_str(y, "456", 10);
-
-    pts1 = ecpts_init_set(x, y, crv, false);
-    CU_ASSERT(NULL != pts1);
-    CU_ASSERT(0 == mpz_cmp(x, pts1->x));
-    CU_ASSERT(0 == mpz_cmp(y, pts1->y));
-    CU_ASSERT(0 == eccrvw_are_equals(crv, pts1->C));
-    CU_ASSERT(false == pts1->inf);
+    return;
 }
 
 void
-test_ecpts_are_equals()
+test_zdouble()
 {
-    CU_ASSERT(true == ecpts_are_equals(pts1, pts1));
+    return;
 }
 
 void
-test_ecpts_cpy()
+test_zadd()
 {
-    pts2 = ecpts_init();
-    ecpts_cpy(pts2, pts1);
-
-    CU_ASSERT(true == ecpts_are_equals(pts1, pts2));
+    return;
 }
 
 void
-test_ecpts_is_inf()
+test_zmult()
 {
-    ecpts_set_inf(pts2, true);
-
-    CU_ASSERT(true == ecpts_is_inf(pts2));
-}
-
-void
-test_ecpts_destroy()
-{
-    pts1 = ecpts_destroy(pts1);
-    // pts2 = ecpts_destroy(pts2);
-
-    CU_ASSERT(NULL == pts1);
-    // CU_ASSERT(NULL == pts2);
+    return;
 }
