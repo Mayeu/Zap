@@ -130,8 +130,11 @@ zinvert(ecpts_t * R, ecpts_t * P)
     /*
      * yr
      */
-    mpz_add(R->y, P->x, P->y);
+    mpz_ui_sub(R->y, 0, P->y);
     mpz_mod(R->y, R->y, C->p);
+
+    ecpts_set_inf(R, P->inf);
+    ecpts_set_curve(R, P->C);
 
     return;
 }
