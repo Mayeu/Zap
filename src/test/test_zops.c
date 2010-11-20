@@ -26,6 +26,7 @@
 #include "bool.h"
 #include "zcrvw.h"
 #include "zpts.h"
+#include "zops.h"
 
 /*
  * Global point for the tests
@@ -65,6 +66,9 @@ zops_init_suite(void)
                     gy,
                     r;
 
+    /*
+     * Init the curve
+     */
     mpz_init_set_str(p,
                      "8884933102832021670310856601112383279507496491807071433260928721853918699951",
                      10);
@@ -95,7 +99,16 @@ zops_init_suite(void)
 
     crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
 
-    // mpz_clears(p, n, a4, a6, r4, r6, gx, gy, r);
+    mpz_clears(p, n, a4, a6, r4, r6, r, NULL);
+
+    /*
+     * Init the point
+     */
+
+    pts1 = ecpts_init_set(gx, gy, crv, false);
+    pts2 = ecpts_init();
+
+    mpz_clears(gx, gy, NULL);
 
     return 0;
 }
@@ -142,7 +155,6 @@ test_zops()
         CU_cleanup_registry();
         // return CU_get_error();
     }
-
 }
 
 /*
@@ -152,18 +164,132 @@ test_zops()
 void
 test_zinvert()
 {
+
+    mpz_t           x,
+                    y;
+    ecpts_t        *pts1_invert;
+
+    mpz_init_set_str(x,
+                     "7638166354848741333090176068286311479365713946232310129943505521094105356372",
+                     10);
+    mpz_init_set_str(y,
+                     "8122245735780045692549766688410697005446841210689087931311642634992095529957",
+                     10);
+    pts1_invert = ecpts_init_set(x, y, crv, false);
+
+    zinvert(pts2, pts1);
+
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts1_invert));
+
+    /*
+     * Free the memory
+     */
+    ecpts_destroy(pts1_invert);
+    mpz_clears(x, y, NULL);
+
     return;
 }
 
 void
 test_zdouble()
 {
+
+    mpz_t           x,
+                    y;
+    ecpts_t        *pts1_double;
+
+    mpz_init_set_str(x,
+                     "863754428068677557929687025502332508399472799151289953149508604923086976251",
+                     10);
+    mpz_init_set_str(y,
+                     "2263694661988027868788176657560100371119172698625506618490887528730945004028",
+                     10);
+    pts1_double = ecpts_init_set(x, y, crv, false);
+
+    zdouble(pts2, pts1);
+
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts1_double));
+
+    /*
+     * Free the memory !
+     */
+    ecpts_destroy(pts1_double);
+    mpz_clears(x, y, NULL);
+
     return;
 }
 
 void
 test_zadd()
 {
+    mpz_t           x,
+                    y;
+    ecpts_t        *pts_inf,
+                   *pts1_double,
+                   *pts_add,
+                   *pts1_inverse;
+
+    /*
+     * add to the point to infinity
+     */
+    pts_inf = ecpts_init();
+    ecpts_set_inf(pts_inf, true);
+
+    zadd(pts2, pts_inf, pts1);
+
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts1));
+
+    zadd(pts2, pts1, pts_inf);
+
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts1));
+
+    /*
+     * inverse
+     */
+
+    mpz_init_set_str(x,
+                     "7638166354848741333090176068286311479365713946232310129943505521094105356372",
+                     10);
+    mpz_init_set_str(y,
+                     "8122245735780045692549766688410697005446841210689087931311642634992095529957",
+                     10);
+    pts1_inverse = ecpts_init_set(x, y, crv, false);
+
+    zadd(pts2, pts1, pts1_inverse);
+
+    CU_ASSERT(true == ecpts_is_inf(pts2));
+
+    /*
+     * double
+     */
+    mpz_init_set_str(x,
+                     "863754428068677557929687025502332508399472799151289953149508604923086976251",
+                     10);
+    mpz_init_set_str(y,
+                     "2263694661988027868788176657560100371119172698625506618490887528730945004028",
+                     10);
+    pts1_double = ecpts_init_set(x, y, crv, false);
+    zadd(pts2, pts1, pts1);
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts1_double));
+    /*
+     * Two different point
+     */
+    mpz_init_set_str(x,
+                     "800469382577851882430764267503379551369032669306397380363294188843884499915",
+                     10);
+    mpz_init_set_str(y,
+                     "8735734427290128121604527478505598824582703967829400306565714269709266167368",
+                     10);
+    pts_add = ecpts_init_set(x, y, pts1->C, false);
+    zadd(pts2, pts1, pts1_double);
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts_add));
+    /*
+     * Free the memory
+     */
+    mpz_clears(x, y, NULL);
+    ecpts_destroy(pts1_double);
+    ecpts_destroy(pts_add);
+    ecpts_destroy(pts_inf);
     return;
 }
 
