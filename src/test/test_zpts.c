@@ -54,7 +54,7 @@ void            test_ecpts_destroy();
  * the tests.  * Returns zero on success, non-zero otherwise.  
  */
 int
-init_suite1(void)
+zpts_init_suite(void)
 {
     mpz_t           p,
                     n,
@@ -106,7 +106,7 @@ init_suite1(void)
  * tests. Returns zero on success, non-zero otherwise. 
  */
 int
-clean_suite1(void)
+zpts_clean_suite(void)
 {
     /*
      * Destroy everything
@@ -128,8 +128,8 @@ test_zpts()
      * add a suite to the registry 
      */
     pSuite =
-        CU_add_suite("Test suite for zpts module", init_suite1,
-                     clean_suite1);
+        CU_add_suite("Test suite for zpts module", zpts_init_suite,
+                     zpts_clean_suite);
     if (NULL == pSuite) {
         CU_cleanup_registry();
         // return CU_get_error();
