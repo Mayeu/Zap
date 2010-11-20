@@ -169,7 +169,7 @@ test_ecpts_init_set(void)
     CU_ASSERT(NULL != pts1);
     CU_ASSERT(0 == mpz_cmp(x, pts1->x));
     CU_ASSERT(0 == mpz_cmp(y, pts1->y));
-    CU_ASSERT(0 == eccrvw_are_equals(crv, pts1->C));
+    CU_ASSERT(true == eccrvw_are_equals(crv, pts1->C));
     CU_ASSERT(false == pts1->inf);
 }
 

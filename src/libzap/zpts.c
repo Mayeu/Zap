@@ -212,6 +212,11 @@ ecpts_is_inf(ecpts_t * pts)
 bool
 ecpts_are_equals(ecpts_t * P, ecpts_t * Q)
 {
+    /*
+     * The point are the point at infinity
+     */
+    if (P->inf == Q->inf && P->inf)
+        return true;
 
     /*
      * Test everything else
@@ -220,8 +225,7 @@ ecpts_are_equals(ecpts_t * P, ecpts_t * Q)
         if (mpz_cmp(P->y, Q->y) == 0)
             if (P->inf == Q->inf)
                 if (eccrvw_are_equals(P->C, Q->C))
-                    if (P->inf == Q->inf)
-                        return true;
+                    return true;
 
     return false;
 }
