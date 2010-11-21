@@ -266,10 +266,7 @@ eccrvw_are_equals(eccrvw_t * crv1, eccrvw_t * crv2)
                             if (mpz_cmp(crv1->gx, crv2->gx) == 0)
                                 if (mpz_cmp(crv1->gy, crv2->gy) == 0)
                                     if (mpz_cmp(crv1->r, crv2->r) == 0)
-
                                         return true;
 
-
     return false;
-
 }
