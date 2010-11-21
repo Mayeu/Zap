@@ -200,6 +200,70 @@ zdouble(ecpts_t * R, ecpts_t * P)
     // 
     // 
     // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
+    // 
     // a3 */
     mpz_mod(R->y, R->y, C->p);  /* stay in the additive ring ! */
 
@@ -220,11 +284,8 @@ void
 zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
 {
     char           *nb;
-
     nb = NULL;
-
     nb = mpz_get_str(nb, 2, k); /* we convert k into a string of bit */
-
     ecpts_cpy(R, P);
 
     /*
@@ -236,12 +297,14 @@ zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
     /*
      * we start at n-1 bit
      */
-    while (++nb != NULL) {
+    nb++;
+    while (*nb != '\0') {       // modif by pat
         zadd(R, R, R);
-        if (*nb == '1')
+        if (*nb == '1') {
             zadd(R, R, P);
+        }
+        nb++;
     }
-
     return;
 }
 
