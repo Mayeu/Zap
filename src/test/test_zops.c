@@ -271,6 +271,7 @@ test_zadd()
     pts1_double = ecpts_init_set(x, y, crv, false);
     zadd(pts2, pts1, pts1);
     CU_ASSERT(true == ecpts_are_equals(pts2, pts1_double));
+
     /*
      * Two different point
      */
@@ -281,8 +282,11 @@ test_zadd()
                      "8735734427290128121604527478505598824582703967829400306565714269709266167368",
                      10);
     pts_add = ecpts_init_set(x, y, pts1->C, false);
+
     zadd(pts2, pts1, pts1_double);
+
     CU_ASSERT(true == ecpts_are_equals(pts2, pts_add));
+
     /*
      * Free the memory
      */
@@ -290,11 +294,41 @@ test_zadd()
     ecpts_destroy(pts1_double);
     ecpts_destroy(pts_add);
     ecpts_destroy(pts_inf);
+
     return;
 }
 
 void
 test_zmult()
 {
+    mpz_t           x,
+                    y,
+                    n;
+    ecpts_t        *pts_mult;
+
+    /*
+     * init the ref point
+     */
+    mpz_init_set_str(x,
+                     "7696398769580562633017031305655010856506487874930141333077734901330310346311",
+                     10);
+    mpz_init_set_str(y,
+                     "5744437570816677206845356387490302083802559810252810466915742738099776117342",
+                     10);
+
+    pts_mult = ecpts_init_set(x, y, crv, false);
+
+    mpz_init_set_ui(n, 556415);
+
+    zmult(pts2, pts1, n);
+
+    CU_ASSERT(true == ecpts_are_equals(pts2, pts_mult));
+
+    /*
+     * Free the memory
+     */
+    mpz_clears(x, y, n, NULL);
+    ecpts_destroy(pts_mult);
+
     return;
 }
