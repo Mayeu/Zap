@@ -14,26 +14,31 @@
  * @author <mayeu.tik@gmail.com> <pierrealain.toret@gmail.com>
  * @date 2010/10/19
  */
+
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
+#include <unistd.h>
+#include "bool.h"
 #include "zcrvw.h"
 #include "zpts.h"
 #include "zdh.h"
-int
-main(int argc, const char *argv[])
+
+void
+dh_protocol(char *fname, bool verbose)
 {
-    /*
-     * Pointer to the file used by the tests. 
-     */
+
     FILE           *file = NULL;
     char            line[250];
     char           *pline = line;
     char           *kax = NULL,
         *kay = NULL,
         *kbx = NULL,
-        *kby = NULL;
+        *kby = NULL,
+        *ra = NULL,
+        *rb = NULL;
     int             line_number = 0;
     eccrvw_t       *crv;
     ecpts_t        *P,
@@ -53,11 +58,9 @@ main(int argc, const char *argv[])
                     a,
                     b;
     bool            res = false;
-    /*
-     * The suite initialization function. * Opens the temporary file used
-     * by the tests. * Returns zero on success, non-zero otherwise. 
-     */
-    file = fopen("crv.txt", "r");
+    // Opening of the curve file and assigning values to the curve
+    // variable
+    file = fopen(fname, "r");
     if (file != NULL) {
         while (fgets(line, sizeof(line), file)) {
             line_number++;
@@ -92,57 +95,158 @@ main(int argc, const char *argv[])
                 break;
             }
         }
+        fclose(file);           // Closing the file
+        // Creation of the curve according to what has been read in the
+        // description file
+        crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
+        P = ecpts_init_set(crv->gx, crv->gy, crv, false);
+        if (verbose == true) {
+            kax = mpz_get_str(kax, 16, P->x);
+            kay = mpz_get_str(kay, 16, P->y);
+            printf("P   : (%s,\n       %s)\n\n", kax, kay);
+        }
+        // A and B are computing their own values KA and KB according to P 
+        // 
+        // and 
+        // 
+        // 
+        // the 2 random numbers computed a and b
+        mpz_init(a);
+        mpz_init(b);
+        A = ecpts_init();
+        B = ecpts_init();
+        KA = ecpts_init();
+        KB = ecpts_init();
+        dh_first_step(A, a, P);
+        if (verbose == true) {
+            kax = mpz_get_str(kax, 16, A->x);
+            kay = mpz_get_str(kay, 16, A->y);
+            ra = mpz_get_str(ra, 16, a);
+            printf("r A : (%s)\n", ra);
+            printf("1 A : (%s,\n       %s)\n\n", kax, kay);
+        }
+        dh_first_step(B, b, P);
+        if (verbose == true) {
+            kbx = mpz_get_str(kbx, 16, B->x);
+            kby = mpz_get_str(kby, 16, B->y);
+            rb = mpz_get_str(rb, 16, b);
+            printf("r B : (%s)\n", rb);
+            printf("1 B : (%s,\n       %s)\n\n", kbx, kby);
+        }
+        // A and B exchange the values computed previously and compute the 
+        // 
+        // new 
+        // 
+        // 
+        // ones
+        dh_second_step(KA, a, B);
+        if (verbose == true) {
+            kax = mpz_get_str(kax, 16, KA->x);
+            kay = mpz_get_str(kay, 16, KA->y);
+            printf("2 A : (%s,\n       %s)\n", kax, kay);
+        }
+        dh_second_step(KB, b, A);
+        if (verbose == true) {
+            kbx = mpz_get_str(kbx, 16, KB->x);
+            kby = mpz_get_str(kby, 16, KB->y);
+            printf("2 B : (%s,\n       %s)\n\n", kbx, kby);
+        }
+        // Now we check if the 2 final keys computed on both sides are the
+        // same
+        res = dh_check_keys(KA, KB);
+        if (res == true) {
+            kax = mpz_get_str(kax, 16, KA->x);
+            kay = mpz_get_str(kay, 16, KA->y);
+            printf("key : (%s,\n       %s)\n", kax, kay);
+
+        } else if (verbose == true) {
+            printf("FAIL !\n\n");
+        }
+        ecpts_destroy(A);
+        ecpts_destroy(B);
+        ecpts_destroy(KA);
+        ecpts_destroy(KB);
+        eccrvw_destroy(crv);
     }
-    fclose(file);
-    crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
-    P = ecpts_init_set(crv->gx, crv->gy, crv, false);
-    kax = mpz_get_str(kax, 16, P->x);
-    kay = mpz_get_str(kay, 16, P->y);
-    printf("point P choisi : (%s,%s)\n", kax, kay);
+    return;
+}
 
+int
+main(int argc, char *argv[])
+{
+    bool            vflag = false;
+    bool            start_dh = false,
+        start_mm = false;
+    char           *mvalue = NULL;
+    char           *cvalue = NULL;
+    int             index;
+    int             c;
 
-    mpz_init(a);
-    mpz_init(b);
-    A = ecpts_init();
-    B = ecpts_init();
-    KA = ecpts_init();
-    KB = ecpts_init();
-    dh_first_step(A, a, P);
-    kax = mpz_get_str(kax, 16, A->x);
-    kay = mpz_get_str(kay, 16, A->y);
-    printf("premier calcul de A : (%s,%s)\n", kax, kay);
+    opterr = 0;
 
-    dh_first_step(B, b, P);
-    kbx = mpz_get_str(kbx, 16, B->x);
-    kby = mpz_get_str(kby, 16, B->y);
-    printf("premier calcul de B : (%s,%s)\n", kbx, kby);
+    while ((c = getopt(argc, argv, "vm:c:")) != -1)
+        switch (c) {
+        case 'v':
+            vflag = true;
+            break;
+        case 'm':
+            mvalue = optarg;
+            start_mm = true;
+            break;
+        case 'c':
+            cvalue = optarg;
+            start_dh = true;
+            break;
+        case '?':
+            if (optopt == 'c')
+                fprintf(stderr,
+                        "Option -%c requires a elliptic curve file as an argument.\n",
+                        optopt);
+            else if (optopt == 'm')
+                fprintf(stderr,
+                        "Option -%c requires a message to encrypt as an argument\n",
+                        optopt);
+            else if (isprint(optopt)) {
+                fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+            } else
+                fprintf(stderr,
+                        "Unknown option character `\\x%x'.\n", optopt);
+            fprintf(stderr, "Usages of zap\n");
+            fprintf(stderr,
+                    "zap -d [-v] \"path-to-weierstrass-elliptic-curve\"\n");
+            fprintf(stderr, "zap -m [-v] \"message-to-encrypt\"\n\n");
+            fprintf(stderr,
+                    "argument -d indicates the Diffie-Hellman protocol\n");
+            fprintf(stderr,
+                    "         -m indicates the use of the Massey-Omura encryption\n");
+            fprintf(stderr, "option -v for verbose output\n");
+            return EXIT_FAILURE;
+        default:
+            return EXIT_FAILURE;
+        }
 
-    dh_second_step(KA, a, B);
-    kax = mpz_get_str(kax, 16, KA->x);
-    kay = mpz_get_str(kay, 16, KA->y);
-    printf("second calcul de A : (%s,%s)\n", kax, kay);
+    /*
+     * printf ("dflag = %d, mvalue = %s, cvalue = %s\n", vflag, mvalue,
+     * cvalue); 
+     */
 
+    for (index = optind; index < argc; index++)
+        printf("Non-option argument %s\n", argv[index]);
+    if (start_dh == true)
+        dh_protocol(cvalue, vflag);
+    else if (start_mm == true); // mm_encrypt(mvalue, vflag);
 
-    dh_second_step(KB, b, A);
-    kbx = mpz_get_str(kbx, 16, KB->x);
-    kby = mpz_get_str(kby, 16, KB->y);
-    printf("second calcul de B : (%s,%s)\n", kbx, kby);
-
-
-    res = dh_check_keys(KA, KB);
-    if (res == true)
-        printf("WIN !\n");
-    else
-        printf("FAIL !\n");
-    kax = mpz_get_str(kax, 16, KA->x);
-    kbx = mpz_get_str(kbx, 16, KB->x);
-    kay = mpz_get_str(kay, 16, KA->y);
-    kby = mpz_get_str(kby, 16, KB->y);
-    printf("clef de A : (%s,%s)\n", kax, kay);
-    printf("clef de B : (%s,%s)\n", kbx, kby);
-    ecpts_destroy(A);
-    ecpts_destroy(B);
-    ecpts_destroy(KA);
-    ecpts_destroy(KB);
+    else {                      // If we don't have to do anything the
+                                // call to Zap is bad
+        fprintf(stderr, "Usages of zap\n");
+        fprintf(stderr,
+                "zap -d [-v] \"path-to-weierstrass-elliptic-curve\"\n");
+        fprintf(stderr, "zap -m [-v] \"message-to-encrypt\"\n\n");
+        fprintf(stderr,
+                "argument -d indicates the Diffie-Hellman protocol\n");
+        fprintf(stderr,
+                "         -m indicates the use of the Massey-Omura encryption\n");
+        fprintf(stderr, "option -v for verbose output\n");
+    }
     return EXIT_SUCCESS;
 }
