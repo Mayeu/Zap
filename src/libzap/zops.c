@@ -264,6 +264,7 @@ zdouble(ecpts_t * R, ecpts_t * P)
     // 
     // 
     // 
+    // 
     // a3 */
     mpz_mod(R->y, R->y, C->p);  /* stay in the additive ring ! */
 
