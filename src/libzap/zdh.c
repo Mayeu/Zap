@@ -43,10 +43,9 @@
 void
 dh_rand_gen(mpz_t p, mpz_t size)
 {
-    srandomdev();
     gmp_randstate_t state;      /* random init stat */
     gmp_randinit_default(state);
-    gmp_randseed_ui(state, random());
+    gmp_randseed_ui(state, rand());
     mpz_urandomm(p, state, size);
     /*
      * Free Ressources

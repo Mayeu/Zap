@@ -21,6 +21,7 @@
 #include <limits.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "bool.h"
 #include "zcrvw.h"
 #include "zpts.h"
@@ -60,6 +61,7 @@ dh_protocol(char *fname, bool verbose)
     bool            res = false;
     // Opening of the curve file and assigning values to the curve
     // variable
+    srand(time(NULL));
     file = fopen(fname, "r");
     if (file != NULL) {
         while (fgets(line, sizeof(line), file)) {
@@ -107,6 +109,9 @@ dh_protocol(char *fname, bool verbose)
         }
         // A and B are computing their own values KA and KB according to P 
         // 
+        // 
+        // 
+        // 
         // and 
         // 
         // 
@@ -134,6 +139,9 @@ dh_protocol(char *fname, bool verbose)
             printf("1 B : (%s,\n       %s)\n\n", kbx, kby);
         }
         // A and B exchange the values computed previously and compute the 
+        // 
+        // 
+        // 
         // 
         // new 
         // 
@@ -237,7 +245,7 @@ main(int argc, char *argv[])
     else if (start_mm == true); // mm_encrypt(mvalue, vflag);
 
     else {                      // If we don't have to do anything the
-                                // call to Zap is bad
+        // call to Zap is bad
         fprintf(stderr, "Usages of zap\n");
         fprintf(stderr,
                 "zap -d [-v] \"path-to-weierstrass-elliptic-curve\"\n");
