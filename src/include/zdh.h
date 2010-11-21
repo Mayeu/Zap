@@ -51,7 +51,7 @@ void            dh_rand_gen(mpz_t p, mpz_t size);
  * @param a pointer to the chosen point of the curve
  */
 
-ecpts_t        *dh_first_step(mpz_t s, ecpts_t * P);
+void            dh_first_step(ecpts_t * R, mpz_t s, ecpts_t * P);
 
 /*
  * @brief compute one's external part of the key
@@ -59,7 +59,7 @@ ecpts_t        *dh_first_step(mpz_t s, ecpts_t * P);
  * @param a pointer to the internal part of the key
  */
 
-ecpts_t        *dh_second_step(mpz_t s, ecpts_t * P);
+void            dh_second_step(ecpts_t * R, mpz_t s, ecpts_t * P);
 
 /*
  * @brief check if the 2 keys are the same

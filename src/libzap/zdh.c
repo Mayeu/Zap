@@ -44,12 +44,9 @@ void
 dh_rand_gen(mpz_t p, mpz_t size)
 {
     gmp_randstate_t state;      /* random init stat */
-
     gmp_randinit_default(state);
     gmp_randseed_ui(state, time(NULL));
-
     mpz_urandomm(p, state, size);
-
     /*
      * Free Ressources
      */
@@ -62,15 +59,14 @@ dh_rand_gen(mpz_t p, mpz_t size)
  * @param a pointer to the chosen point of the curve
  */
 
-ecpts_t        *
-dh_first_step(mpz_t s, ecpts_t * P)
+void
+dh_first_step(ecpts_t * R, mpz_t s, ecpts_t * P)
 {
-    ecpts_t        *S;
     // Computation of the radom number
     dh_rand_gen(s, P->C->p);
     // Computation of one's part of the key
-    zmult(S, P, s);
-    return S;
+    zmult(R, P, s);
+    return;
 }
 
 /*
@@ -79,13 +75,12 @@ dh_first_step(mpz_t s, ecpts_t * P)
  * @param a pointer to the internal part of the key
  */
 
-ecpts_t        *
-dh_second_step(mpz_t s, ecpts_t * P)
+void
+dh_second_step(ecpts_t * R, mpz_t s, ecpts_t * P)
 {
-    ecpts_t        *K;
     // Computation of the foreign part of the key
-    zmult(K, P, s);
-    return K;
+    zmult(R, P, s);
+    return;
 }
 
 /*
