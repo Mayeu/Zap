@@ -271,8 +271,8 @@ zmult(ecpts_t * R, ecpts_t * P, mpz_t k)
         zdouble(R, R);
         if (*nb == '1')
             zadd(R, R, P);
-        }
     }
+
     return;
 }
 

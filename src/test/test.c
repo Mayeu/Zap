@@ -43,7 +43,7 @@ main()
     if (CUE_SUCCESS != CU_initialize_registry())
         return CU_get_error();
 
-   test_zcrvw();
+    test_zcrvw();
     test_zpts();
     test_zops();
 
