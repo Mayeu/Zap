@@ -98,8 +98,10 @@ dh_protocol(char *fname, bool verbose)
             }
         }
         fclose(file);           // Closing the file
-        // Creation of the curve according to what has been read in the
-        // description file
+        /* 
+         * Creation of the curve according to what has been read in the
+         * description file
+         */
         crv = eccrvw_create(p, n, a4, a6, r4, r6, gx, gy, r);
         P = ecpts_init_set(crv->gx, crv->gy, crv, false);
         if (verbose == true) {
@@ -107,15 +109,10 @@ dh_protocol(char *fname, bool verbose)
             kay = mpz_get_str(kay, 16, P->y);
             printf("P   : (%s,\n       %s)\n\n", kax, kay);
         }
-        // A and B are computing their own values KA and KB according to P 
-        // 
-        // 
-        // 
-        // 
-        // and 
-        // 
-        // 
-        // the 2 random numbers computed a and b
+        /*
+         * A and B are computing their own values KA and KB according to P and 
+         * the 2 random numbers computed a and b
+         */
         mpz_init(a);
         mpz_init(b);
         A = ecpts_init();
@@ -138,15 +135,10 @@ dh_protocol(char *fname, bool verbose)
             printf("r B : (%s)\n", rb);
             printf("1 B : (%s,\n       %s)\n\n", kbx, kby);
         }
-        // A and B exchange the values computed previously and compute the 
-        // 
-        // 
-        // 
-        // 
-        // new 
-        // 
-        // 
-        // ones
+        /*
+         * A and B exchange the values computed previously and compute the 
+         * new ones
+         */
         dh_second_step(KA, a, B);
         if (verbose == true) {
             kax = mpz_get_str(kax, 16, KA->x);
