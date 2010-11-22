@@ -121,9 +121,8 @@ pts2msg(ecpts_t * pts)
 
     shift = 1;
     while (*msg_hex != '\0') {
-        *msg =
-            *msg | ((*msg_hex > 'A') ? (*msg_hex - 'A' + 10)
-                    : (*msg_hex - '0'));
+        *msg = *msg | ((*msg_hex > 'A') ? (*msg_hex - 'A' + 10)
+                       : (*msg_hex - '0'));
         if (shift)
             *msg = (*msg) << 4;
         else
