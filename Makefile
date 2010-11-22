@@ -24,19 +24,19 @@ BIN = $(PROJECT_DIR)/bin
 BUILD = $(PROJECT_DIR)/build
 
 # Object files
-OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o)
+OBJS_LIB = $(addprefix $(BUILD)/, zpts.o zcrvw.o zops.o zdh.o zmsg.o)
 OBJS_ZAP = $(addprefix $(BUILD)/, zap.o)
-OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zpts.o test_zcrvw.o test_zops.o)
-TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c test_zcrvw.c test_zops.c)
+OBJS_TEST = $(addprefix $(BUILD)/, test.o test_zpts.o test_zcrvw.o test_zops.o test_msg.o)
+TEST_DEPS = $(addprefix $(SRC_TEST)/, test.c test_zpts.c test_zcrvw.c test_zops.c test_msg.c)
 
 #Compiler
 CC = gcc
 # GCC flags
 CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
-LDFLAGS = -ggdb -lgmp #-lcunit
+LDFLAGS = -ggdb -lgmp -lcunit
 
 # By default indent, build the project, the project and the doc
-all: indent link doc
+all: indent link linktest doc
 
 # Lib
 lib: $(OBJS_LIB)
@@ -79,7 +79,7 @@ indent:
 	indent $(IDT_OPT) $(SRC_LIB)/*.c
 #	indent $(IDT_OPT) $(SRC_LIB)/*.h
 	indent $(IDT_OPT) $(SRC_TEST)/*.c
-#	indent $(IDT_OPT) $(SRC_TEST)/*.h
+	indent $(IDT_OPT) $(SRC_TEST)/*.h
 
 # Doc
 doc :
