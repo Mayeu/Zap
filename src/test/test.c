@@ -46,6 +46,7 @@ main()
     test_zcrvw();
     test_zpts();
     test_zops();
+    test_zmsg();
 
     /*
      * Run all tests using the CUnit Basic interface 
