@@ -98,7 +98,7 @@ dh_protocol(char *fname, bool verbose)
             }
         }
         fclose(file);           // Closing the file
-        /* 
+        /*
          * Creation of the curve according to what has been read in the
          * description file
          */
