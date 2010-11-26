@@ -62,6 +62,7 @@ dh_protocol(char *fname, bool verbose)
     // Opening of the curve file and assigning values to the curve
     // variable
     srand(time(NULL));
+    printf("   %s   \n", fname);
     file = fopen(fname, "r");
     if (file != NULL) {
         while (fgets(line, sizeof(line), file)) {
@@ -105,17 +106,11 @@ dh_protocol(char *fname, bool verbose)
         if (verbose == true) {
             kax = mpz_get_str(kax, 16, P->x);
             kay = mpz_get_str(kay, 16, P->y);
+            printf("Diffie-Hellman key exchange :\n");
             printf("P   : (%s,\n       %s)\n\n", kax, kay);
         }
-        // A and B are computing their own values KA and KB according to P 
-        // 
-        // 
-        // 
-        // 
-        // and 
-        // 
-        // 
-        // the 2 random numbers computed a and b
+        // A and B are computing their own values KA and KB according to 
+        // P and the 2 random numbers computed a and b
         mpz_init(a);
         mpz_init(b);
         A = ecpts_init();
@@ -138,38 +133,32 @@ dh_protocol(char *fname, bool verbose)
             printf("r B : (%s)\n", rb);
             printf("1 B : (%s,\n       %s)\n\n", kbx, kby);
         }
-        // A and B exchange the values computed previously and compute the 
-        // 
-        // 
-        // 
-        // 
-        // new 
-        // 
-        // 
-        // ones
+        // A and B exchange the values computed previously and compute 
+        // the new ones
+
         dh_second_step(KA, a, B);
         if (verbose == true) {
             kax = mpz_get_str(kax, 16, KA->x);
             kay = mpz_get_str(kay, 16, KA->y);
-            printf("2 A : (%s,\n       %s)\n", kax, kay);
+            printf("2 A : (%s,\n %s)\n", kax, kay);
         }
         dh_second_step(KB, b, A);
         if (verbose == true) {
             kbx = mpz_get_str(kbx, 16, KB->x);
             kby = mpz_get_str(kby, 16, KB->y);
-            printf("2 B : (%s,\n       %s)\n\n", kbx, kby);
-        }
-        // Now we check if the 2 final keys computed on both sides are the
-        // same
+            printf("2 B : (%s,\n%s)\n\n", kbx, kby);
+        }                       // Now we check if the 2 final keys
+        // computed on both sides are the same 
         res = dh_check_keys(KA, KB);
         if (res == true) {
             kax = mpz_get_str(kax, 16, KA->x);
             kay = mpz_get_str(kay, 16, KA->y);
-            printf("key : (%s,\n       %s)\n", kax, kay);
+            printf("key : (%s,\n %s)\n", kax, kay);
 
         } else if (verbose == true) {
             printf("FAIL !\n\n");
         }
+
         ecpts_destroy(A);
         ecpts_destroy(B);
         ecpts_destroy(KA);
@@ -186,13 +175,13 @@ main(int argc, char *argv[])
     bool            start_dh = false,
         start_mm = false;
     char           *mvalue = NULL;
-    char           *cvalue = NULL;
+    char           *dvalue = NULL;
     int             index;
     int             c;
 
     opterr = 0;
 
-    while ((c = getopt(argc, argv, "vm:c:")) != -1)
+    while ((c = getopt(argc, argv, "vm:d:")) != -1)
         switch (c) {
         case 'v':
             vflag = true;
@@ -201,12 +190,12 @@ main(int argc, char *argv[])
             mvalue = optarg;
             start_mm = true;
             break;
-        case 'c':
-            cvalue = optarg;
+        case 'd':
+            dvalue = optarg;
             start_dh = true;
             break;
         case '?':
-            if (optopt == 'c')
+            if (optopt == 'd')
                 fprintf(stderr,
                         "Option -%c requires a elliptic curve file as an argument.\n",
                         optopt);
@@ -241,7 +230,7 @@ main(int argc, char *argv[])
     for (index = optind; index < argc; index++)
         printf("Non-option argument %s\n", argv[index]);
     if (start_dh == true)
-        dh_protocol(cvalue, vflag);
+        dh_protocol(dvalue, vflag);
     else if (start_mm == true); // mm_encrypt(mvalue, vflag);
 
     else {                      // If we don't have to do anything the
