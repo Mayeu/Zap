@@ -36,7 +36,7 @@ CFLAGS = -ggdb -Werror -Wall -I$(SRC)/include -lgmp
 LDFLAGS = -ggdb -lgmp -lcunit
 
 # By default indent, build the project, the project and the doc
-all: indent link linktest doc
+all: indent linktest link doc
 
 # Lib
 lib: $(OBJS_LIB)

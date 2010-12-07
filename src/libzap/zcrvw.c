@@ -107,7 +107,7 @@ eccrvw_destroy(eccrvw_t * crv)
 void
 eccrvw_set_p(eccrvw_t * crv, mpz_t p)
 {
-    mpz_set(crv->p, p);
+    mpz_init_set(crv->p, p);
 }
 
 /**
@@ -120,7 +120,7 @@ eccrvw_set_p(eccrvw_t * crv, mpz_t p)
 void
 eccrvw_set_n(eccrvw_t * crv, mpz_t n)
 {
-    mpz_set(crv->n, n);
+    mpz_init_set(crv->n, n);
 }
 
 /**
@@ -133,7 +133,7 @@ eccrvw_set_n(eccrvw_t * crv, mpz_t n)
 void
 eccrvw_set_a4(eccrvw_t * crv, mpz_t a4)
 {
-    mpz_set(crv->a4, a4);
+    mpz_init_set(crv->a4, a4);
 }
 
 /**
@@ -146,7 +146,7 @@ eccrvw_set_a4(eccrvw_t * crv, mpz_t a4)
 void
 eccrvw_set_a6(eccrvw_t * crv, mpz_t a6)
 {
-    mpz_set(crv->a6, a6);
+    mpz_init_set(crv->a6, a6);
 }
 
 /**
@@ -159,7 +159,7 @@ eccrvw_set_a6(eccrvw_t * crv, mpz_t a6)
 void
 eccrvw_set_r4(eccrvw_t * crv, mpz_t r4)
 {
-    mpz_set(crv->r4, r4);
+    mpz_init_set(crv->r4, r4);
 }
 
 /**
@@ -172,7 +172,7 @@ eccrvw_set_r4(eccrvw_t * crv, mpz_t r4)
 void
 eccrvw_set_r6(eccrvw_t * crv, mpz_t r6)
 {
-    mpz_set(crv->r6, r6);
+    mpz_init_set(crv->r6, r6);
 }
 
 /**
@@ -185,7 +185,7 @@ eccrvw_set_r6(eccrvw_t * crv, mpz_t r6)
 void
 eccrvw_set_gx(eccrvw_t * crv, mpz_t gx)
 {
-    mpz_set(crv->gx, gx);
+    mpz_init_set(crv->gx, gx);
 }
 
 /**
@@ -198,7 +198,7 @@ eccrvw_set_gx(eccrvw_t * crv, mpz_t gx)
 void
 eccrvw_set_gy(eccrvw_t * crv, mpz_t gy)
 {
-    mpz_set(crv->gy, gy);
+    mpz_init_set(crv->gy, gy);
 }
 
 /**
@@ -211,7 +211,7 @@ eccrvw_set_gy(eccrvw_t * crv, mpz_t gy)
 void
 eccrvw_set_r(eccrvw_t * crv, mpz_t r)
 {
-    mpz_set(crv->r, r);
+    mpz_init_set(crv->r, r);
 }
 
 /**
